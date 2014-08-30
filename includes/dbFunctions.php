@@ -38,7 +38,7 @@
 		
 		mysql_query( $query );
 		
-		rc( '[[report:' . $id . ']] new http://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=View&id=' . $id . ' * ' . $user . ' * New Report' );
+		rc( '[[report:' . $id . ']] new https://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=View&id=' . $id . ' * ' . $user . ' * New Report' );
 	}
 	
 	function createComment( $id, $user, $comment, $forceUser = false ) {
@@ -60,7 +60,7 @@
 		
 		mysql_query( $query );
 		
-		rc( '[[report:' . $id . ']] comment http://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=View&id=' . $id . ' * ' . $user . ' * ' . $comment );
+		rc( '[[report:' . $id . ']] comment https://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=View&id=' . $id . ' * ' . $user . ' * ' . $comment );
 	}
 	
 	function updateStatusIfIncorrect( $id, $statusId, $username ) {

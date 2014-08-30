@@ -34,7 +34,7 @@
 			echo '<tr><th>Article:</th><td>' . $this->row[ 'article' ] . '</td></tr>';
 //			echo '<tr><th>Diff:</th><td><a href="' . $this->row[ 'diff' ] . '">[1]</a></td></tr>';
 			echo '<tr><th>Diff:</th><td style="border: 1px dashed #000000">';
-			echo file_get_contents( 'http://en.wikipedia.org/w/index.php?diffonly=1&action=render&diff=' . urlencode( $this->row[ 'new_id' ] ) );
+			echo file_get_contents( 'https://en.wikipedia.org/w/index.php?diffonly=1&action=render&diff=' . urlencode( $this->row[ 'new_id' ] ) );
 			echo '</td></tr>';
 			echo '<tr><th>Reason:</th><td>' . $this->row[ 'reason' ] . '</td></tr>';
 			$user = 'Anonymous';

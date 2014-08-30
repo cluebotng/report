@@ -24,7 +24,7 @@ if(isset($_REQUEST['diff']) && !empty($_REQUEST['diff'])) {
     die(output_encoding($data));
 }
 
-$api = unserialize(file_get_contents('http://en.wikipedia.org/w/api.php?action=query&prop=revisions&titles=' . $article . '&rvstartid=' . $diff . '&rvlimit=2&rvprop=flags|comment|timestamp|user|content|ids&format=php'));
+$api = unserialize(file_get_contents('https://en.wikipedia.org/w/api.php?action=query&prop=revisions&titles=' . $article . '&rvstartid=' . $diff . '&rvlimit=2&rvprop=flags|comment|timestamp|user|content|ids&format=php'));
 
 $api = array_shift($api['query']['pages']);
 $user = $api['revisions'][0]['user'];
@@ -32,7 +32,7 @@ $ns = $api['ns'];
 $title = $api['title'];
 $timestamp = $api['revisions'][0]['timestamp'];;
 
-$cb = unserialize(file_get_contents('http://toolserver.org/~cobi/cb.php?user=' . urlencode($user) . '&ns=' . $ns. '&title=' . urlencode($title) . '&timestamp=' . urlencode($timestamp)));
+$cb = unserialize(file_get_contents('https://tools.wmflabs.org/cluebot/cb.php?user=' . urlencode($user) . '&ns=' . $ns. '&title=' . urlencode($title) . '&timestamp=' . urlencode($timestamp)));
 
 if(!isset($cb) || empty($cb) || !isset($api) || empty($api)) {
     $data = array(

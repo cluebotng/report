@@ -17,7 +17,7 @@ format - Output format, valid values are as follows:
 Methods:
 |-Reports:
 | |- List all reports
-| | `- http://api.cluebot.cluenet.org/?action=reports.list
+| | `- https://tools.wbflabs.org/cluebot/api/?action=reports.list
 | |  `- Accepts the following arguments:
 | |     status - (optional) Report status, valid values are as follows:
 | |       1 - Reported
@@ -32,33 +32,33 @@ Methods:
 | |       10 - Reviewed (Not included in dataset)
 | |
 | |- Get specific report
-|   `- http://api.cluebot.cluenet.org/?action=reports.get
+|   `- https://tools.wbflabs.org/cluebot/api/?action=reports.get
 |    `- Accepts the following arguments:
 |       rid - Report ID, valid values are obtained from the reports.list method
 |
 |-Beaten: - These are not implimented yet
 | |- List all beaten reverts
-|   `- http://api.cluebot.cluenet.org/?action=beaten.list
+|   `- https://tools.wbflabs.org/cluebot/api/?action=beaten.list
 |    `- Accepts the following arguments:
 |       article - (Optional) article the edit was on
 |       user - (Optional) user the edit was by
 |
 |-Users:
 | |- List all users
-| |`- http://api.cluebot.cluenet.org/?action=users.list
+| |`- https://tools.wbflabs.org/cluebot/api/?action=users.list
 | | `- Accepts the following arguments:
 | |    superadmin - (Optional) filter by superadmin status (1 for yes, 0 for no)
 | |    admin - (Optional) filter by admin status (1 for yes, 0 for no)
 | |
 | |- Get specific user - Certain information like hashed passwords will not be returned
-|  `- http://api.cluebot.cluenet.org/?action=users.get
+|  `- https://tools.wbflabs.org/cluebot/api/?action=users.get
 |   `- Accepts the following arguments:
 |      uid - User ID
 |      username - Username
 |
 |-Edits:
 | |- List all edits
-| | `- http://api.cluebot.cluenet.org/?action=edits.list
+| | `- https://tools.wbflabs.org/cluebot/api/?action=edits.list
 | |  `- Accepts the following arguments:
 | |     eid - (Optional) Get edits after this id
 | |     user - (Optional) User the edit was by
@@ -68,7 +68,7 @@ Methods:
 | |     reverted - (Optional) Edit reverted (1 for yes, 0 for no)
 | |
 | |- Get specific edit
-|   `- http://api.cluebot.cluenet.org/?action=edits.get
+|   `- https://tools.wbflabs.org/cluebot/api/?action=edits.get
 |    `- Accepts the following arguments:
 |       eid - CBNG edit ID (see talk page message comments)
 |       diff - Diff URL
@@ -77,14 +77,14 @@ Methods:
 |
 |-Live: - NOTE THESE DO NOT CHECK PRE/POST PROCESSING STUFF JUST THE CORE OUTPUT
 | |- Check a wikipedia id against the core
-|   `- http://api.cluebot.cluenet.org/?action=live.edit
+|   `- https://tools.wbflabs.org/cluebot/api/?action=live.edit
 |    `- Accepts the following arguments:
 |       article - Article the edit is in
 |       diff - Diff ID of the edit
 |
 `-Help:
  |- Get module documentation
-   `- http://api.cluebot.cluenet.org/?action=help
+   `- https://tools.wbflabs.org/cluebot/api/?action=help
 ");
 
 $data = array(

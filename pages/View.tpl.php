@@ -14,7 +14,7 @@
 	<tr>
 		<th>Diff:</th>
 		<td class="diffborder">
-			<?PHP echo file_get_contents( 'http://en.wikipedia.org/w/index.php?diffonly=1&action=render&diff=' . urlencode( $this->row[ 'new_id' ] ) ); ?>
+			<?PHP echo file_get_contents( 'https://en.wikipedia.org/w/index.php?diffonly=1&action=render&diff=' . urlencode( $this->row[ 'new_id' ] ) ); ?>
 		</td>
 	</tr>
 	<tr>

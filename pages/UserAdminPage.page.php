@@ -29,7 +29,7 @@
 					mysql_query( 'UPDATE `users` SET ' . $set . ' WHERE `userid` = \'' . mysql_real_escape_string( $_REQUEST[ 'uid' ] ) . '\'' );
 				}
 				
-				rc( '[[report:Special:UserAdmin]] ' . $_REQUEST[ 'action' ] . ' http://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=User+Admin * ' . $_SESSION[ 'username' ] . ' * ' . $_REQUEST[ 'action' ] . ' ' . $_REQUEST[ 'user' ] );
+				rc( '[[report:Special:UserAdmin]] ' . $_REQUEST[ 'action' ] . ' https://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=User+Admin * ' . $_SESSION[ 'username' ] . ' * ' . $_REQUEST[ 'action' ] . ' ' . $_REQUEST[ 'user' ] );
 				
 				header( 'Location: ?page=User+Admin' );
 				die();
