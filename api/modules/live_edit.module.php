@@ -4,7 +4,7 @@
  * - Runs a wikipedia diff ID though the core and returns the result
  */
 
-if(isset($_REQUEST['article']) && !empty($_REQUEST['article'])) {
+if (isset($_REQUEST['article']) && !empty($_REQUEST['article'])) {
     $article = $_REQUEST['article'];
 } else {
     $data = array(
@@ -14,7 +14,7 @@ if(isset($_REQUEST['article']) && !empty($_REQUEST['article'])) {
     die(output_encoding($data));
 }
 
-if(isset($_REQUEST['diff']) && !empty($_REQUEST['diff'])) {
+if (isset($_REQUEST['diff']) && !empty($_REQUEST['diff'])) {
     $diff = $_REQUEST['diff'];
 } else {
     $data = array(
@@ -34,7 +34,7 @@ $timestamp = $api['revisions'][0]['timestamp'];;
 
 $cb = unserialize(file_get_contents('https://tools.wmflabs.org/cluebot/cb.php?user=' . urlencode($user) . '&ns=' . $ns. '&title=' . urlencode($title) . '&timestamp=' . urlencode($timestamp)));
 
-if(!isset($cb) || empty($cb) || !isset($api) || empty($api)) {
+if (!isset($cb) || empty($cb) || !isset($api) || empty($api)) {
     $data = array(
         "error" => "internal_error",
         "error_message" => "Error occurred while talking to teh API.",
@@ -116,7 +116,7 @@ $cuelement = $doc->createElement('current');
 $roote->appendChild($cuelement);
 
 $selement = $doc->createElement('minor');
-if($api['revisions'][0]['minor'] === True) {
+if ($api['revisions'][0]['minor'] === true) {
     $element->appendChild(new DOMText('True'));
 } else {
     $element->appendChild(new DOMText('False'));
@@ -145,7 +145,7 @@ $prelement->appendChild($selement);
 $xml = str_replace('</WPEditSet>', '', $doc->saveXML());
 
 $fp = fsockopen($coreip, $coreport, $errno, $errstr, 15);
-if(!$fp) {
+if (!$fp) {
     $data = array(
         "error" => "internal_error",
         "error_message" => "Error occurred opening a socket to the backend.",
@@ -158,13 +158,13 @@ fflush($fp);
 
 $returnXML = '';
 $endeditset = false;
-while(!feof($fp)) {
+while (!feof($fp)) {
     $returnXML .= fgets($fp, 4096);
-        if(strpos($returnXML, '</WPEdit>' ) === false and !$endeditset) {
-            fwrite($fp, '</WPEditSet>');
-            fflush($fp);
-            $endeditset = true;
-        }
+    if (strpos($returnXML, '</WPEdit>') === false and !$endeditset) {
+        fwrite($fp, '</WPEditSet>');
+        fflush($fp);
+        $endeditset = true;
+    }
 }
 fclose($fp);
 
@@ -177,4 +177,3 @@ $data = array(
     "think_vandalism" => $isVandalism,
 );
 die(output_encoding($data));
-?>

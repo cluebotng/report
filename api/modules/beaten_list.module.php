@@ -10,4 +10,3 @@ $data = array(
 );
 
 die(output_encoding($data));
-?>

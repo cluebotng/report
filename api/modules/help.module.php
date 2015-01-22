@@ -88,8 +88,7 @@ Methods:
 ");
 
 $data = array(
-	"Help" => $help_text,
+    "Help" => $help_text,
 );
 
 die(output_encoding($data));
-?>
