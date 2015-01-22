@@ -153,7 +153,7 @@
 		<tr>
 		<?php
         if ($user == 'Anonymous') {
-            echo recaptcha_get_html($recaptcha_pubkey, $use_ssl=true);
+            echo recaptcha_get_html($recaptcha_pubkey);
         }
         if (isset($this->bad_captca) && $this->bad_captca === true) {
             echo 'BAD CAPTCHA! TRY AGAIN!';

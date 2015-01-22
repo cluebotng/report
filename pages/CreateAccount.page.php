@@ -42,7 +42,7 @@
             echo '<tr><th>Username:</th><td><input type="text" name="username" /></td></tr>';
             echo '<tr><th>Password:</th><td><input type="password" name="password" /></td></tr>';
             echo '<tr><th>E-mail:</th><td><input type="text" name="email" /></td></tr>';
-            echo recaptcha_get_html($recaptcha_pubkey, $use_ssl=true);
+            echo recaptcha_get_html($recaptcha_pubkey);
             echo '<tr><td colspan=2><input type="submit" name="submit" value="Register" /></td></tr>';
             echo '</table>';
             echo '</form>';
