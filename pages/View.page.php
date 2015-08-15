@@ -32,7 +32,7 @@
                         $this->bad_comment = true;
                     }
 
-                    if ($this->bad_captca === false) {
+                    if ($this->bad_captca === false && $this->bad_comment === false) {
                         createComment($this->id, $_POST[ 'user' ], $_POST[ 'comment' ]);
                         header('Location: ?page=View&id=' . $this->id);
                         die();
