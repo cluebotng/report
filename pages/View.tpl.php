@@ -158,6 +158,9 @@
         if (isset($this->bad_captca) && $this->bad_captca === true) {
             echo 'BAD CAPTCHA! TRY AGAIN!';
         }
+        if (isset($this->bad_comment) && $this-bad_comment === true) {
+            echo 'Please do not attempt to put links in the comments. They will not work';
+        }
 ?>
 		</tr>
 		<tr>

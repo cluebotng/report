@@ -18,6 +18,10 @@
             }
             
             if (isset($_POST[ 'submit' ])) {
+                $this->bad_comment = false;
+                if (strpos($_POST['comment'], '<a href') !== false) {
+                    $this->bad_comment = true;
+                }
                 if (trim($_POST[ 'comment' ]) != '') {
                     $this->bad_captca = false;
                     if (!isset($_SESSION[ 'username' ])) {
