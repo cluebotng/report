@@ -28,7 +28,7 @@
                     }
                     
                     $this->bad_comment = false;
-                    if (strpos($_POST[ 'comment' ], '<a href') !== false) {
+                    if (strpos($_POST[ 'comment' ], 'http://') !== false) {
                         $this->bad_comment = true;
                     }
 
