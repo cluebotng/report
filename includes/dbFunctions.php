@@ -11,13 +11,13 @@
         'Reviewed - Included in dataset as Vandalism',
         'Reviewed - Not included in dataset'
     );
-    
+
     function statusIdToName($status)
     {
         global $statuses;
         return $statuses[ $status ];
     }
-    
+
     function statusNameToId($status)
     {
         global $statuses;
@@ -32,19 +32,19 @@
         } else {
             $userid = -1;
         }
-        
+
         $query = 'INSERT INTO `reports` (`revertid`,`reporterid`,`reporter`,`status`) VALUES (';
         $query.= '\'' . mysql_real_escape_string($id) . '\',';
         $query.= '\'' . mysql_real_escape_string($userid) . '\',';
         $query.= '\'' . mysql_real_escape_string($user) . '\',';
         $query.= '0';
         $query.= ')';
-        
+
         mysql_query($query);
-        
+
         rc('[[report:' . $id . ']] new https://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=View&id=' . $id . ' * ' . $user . ' * New Report');
     }
-    
+
     function createComment($id, $user, $comment, $forceUser = false)
     {
         if (!$forceUser) {
@@ -57,19 +57,19 @@
         } else {
             $userid = -2;
         }
-        
+
         $query = 'INSERT INTO `comments` (`revertid`,`userid`,`user`,`comment`) VALUES (';
         $query.= '\'' . mysql_real_escape_string($id) . '\',';
         $query.= '\'' . mysql_real_escape_string($userid) . '\',';
         $query.= '\'' . mysql_real_escape_string($user) . '\',';
         $query.= '\'' . mysql_real_escape_string($comment) . '\'';
         $query.= ')';
-        
+
         mysql_query($query);
-        
+
         rc('[[report:' . $id . ']] comment https://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=View&id=' . $id . ' * ' . $user . ' * ' . $comment);
     }
-    
+
     function updateStatusIfIncorrect($id, $statusId, $username)
     {
         $row = mysql_fetch_assoc(mysql_query('SELECT `status` FROM `reports` WHERE `revertid` = \'' . mysql_real_escape_string($id) . '\''));
@@ -77,13 +77,13 @@
             updateStatus($id, $statusId, $username);
         }
     }
-    
+
     function updateStatus($id, $statusId, $username)
     {
         mysql_query('UPDATE `reports` SET `status` = \'' . mysql_real_escape_string($statusId) . '\' WHERE `revertid` = \'' . mysql_real_escape_string($id) . '\'');
         createComment($id, 'System', $username . ' has marked this report as "' . statusIdToName($statusId) . '".', true);
     }
-    
+
     function getReport($id)
     {
         $id = '\'' . mysql_real_escape_string($id) . '\'';
@@ -92,13 +92,13 @@
 			FROM `reports`
 			WHERE `revertid` = ' . $id
         );
-        
+
         if (mysql_num_rows($result) == 0) {
             return null;
         }
-        
+
         $reportData = mysql_fetch_assoc($result);
-        
+
         $data = array(
             'id' => $reportData[ 'revertid' ],
             'timestamp' => $reportData[ 'time' ],
@@ -107,13 +107,13 @@
             'status' => statusIdToName($reportData[ 'status' ]),
             'comments' => array()
         );
-        
+
         $result = mysql_query(
             'SELECT `commentid`, UNIX_TIMESTAMP( `timestamp` ) AS `time`, `userid`, `user`, `comment`
 			FROM `comments`
 			WHERE `revertid` = ' . $id
         );
-        
+
         while ($row = mysql_fetch_assoc($result)) {
             $data[ 'comments' ][] = array(
                 'id' => $row[ 'commentid' ],
@@ -124,7 +124,7 @@
                 'comment' => $row[ 'comment' ]
             );
         }
-        
+
         foreach ($data[ 'comments' ] as &$comment) {
             if ($comment[ 'userid' ] != -1) {
                 $row = mysql_fetch_assoc(mysql_query('SELECT `admin`, `superadmin` FROM `users` WHERE `userid` = ' . $comment[ 'userid' ]));
@@ -143,7 +143,7 @@
                 $comment[ 'sadmin' ] = false;
             }
         }
-        
+
         return $data;
     }
 
@@ -160,7 +160,7 @@
         }
         return false;
     }
-    
+
     function isSAdmin()
     {
         if (!isset($_SESSION[ 'sadmin' ])) {
@@ -171,11 +171,13 @@
         }
         return false;
     }
-    
+
     function rc($line)
     {
-        global $rchost, $rcport;
-        $rc = fsockopen('udp://' . $rchost, $rcport);
+        global $rcport;
+        $r = mysql_fetch_assoc(mysql_query('SELECT `node` from `cluster_node` where type="relay"'));
+        if (!$r) {return;}
+        $rc = fsockopen('udp://' . $r['node'], $rcport);
         $line = str_replace(array( "\r", "\n" ), array( '', '/' ), $line);
         if (strlen($line) > 400) {
             $line = substr($line, 0, 394) . ' [...]';
