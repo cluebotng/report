@@ -43,7 +43,7 @@
     /*
      * Try and connect to mysql - we need this for pretty much everything
      */
-    $mysql = @mysqli_connect($dbHost, $dbUser, $dbPass);
+    $mysql = @mysql_connect($dbHost, $dbUser, $dbPass);
     if (!$mysql) {
         $data = array(
             'error' => 'db_error',
@@ -55,7 +55,7 @@
     /*
      * Try and select the db
      */
-    if (!@mysqli_select_db($dbSchema)) {
+    if (!@mysql_select_db($dbSchema)) {
         $data = array(
             'error' => 'db_error',
             'error_message' => 'Could not access database scheme',

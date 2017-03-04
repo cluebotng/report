@@ -57,12 +57,12 @@
         }
     }
     
-    $result = mysqli_query($mysql, 'SELECT `revertid`, `new_id` FROM `reports` JOIN `vandalism` ON `revertid` = `id` WHERE `status` = 2 OR `status` = 5 OR `status` = 6');
+    $result = mysql_query('SELECT `revertid`, `new_id` FROM `reports` JOIN `vandalism` ON `revertid` = `id` WHERE `status` = 2 OR `status` = 5 OR `status` = 6');
     if (!$result) {
-        die(mysqli_error());
+        die(mysql_error());
     }
     $ids = array();
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = mysql_fetch_assoc($result)) {
         $ids[ $row[ 'revertid' ] ] = $row[ 'new_id' ];
     }
     updateStatuses($ids);

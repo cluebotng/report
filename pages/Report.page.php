@@ -20,8 +20,8 @@
                 die();
             }
             
-            $result = mysqli_query($mysql, 'SELECT * FROM `vandalism` WHERE `id` = \'' . mysqli_real_escape_string($_REQUEST[ 'id' ]) . '\'');
-            $this->row = mysqli_fetch_assoc($result);
+            $result = mysql_query('SELECT * FROM `vandalism` WHERE `id` = \'' . mysql_real_escape_string($_REQUEST[ 'id' ]) . '\'');
+            $this->row = mysql_fetch_assoc($result);
         }
         
         public function writeHeader()
