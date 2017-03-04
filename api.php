@@ -1,11 +1,11 @@
 <?PHP
     require_once 'includes/header.php';
     
-    $result = mysql_query('SELECT `new_id` FROM `reports` JOIN `vandalism` ON `revertid` = `id` WHERE `status` = 2');
+    $result = mysqli_query('SELECT `new_id` FROM `reports` JOIN `vandalism` ON `revertid` = `id` WHERE `status` = 2');
     
     $ids = array();
     
-    while ($row = mysql_fetch_assoc($result)) {
+    while ($row = mysqli_fetch_assoc($result)) {
         $ids[] = $row[ 'new_id' ];
     }
     

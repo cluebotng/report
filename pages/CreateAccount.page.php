@@ -11,12 +11,12 @@
                     $this->bad_captca = true;
                 } else {
                     $query = 'INSERT INTO `users` (`username`,`password`,`email`,`admin`) VALUES (';
-                    $query.= '\'' . mysql_real_escape_string($_POST[ 'username' ]) . '\',';
-                    $query.= 'PASSWORD(\'' . mysql_real_escape_string($_POST[ 'password' ]) . '\'),';
-                    $query.= '\'' . mysql_real_escape_string($_POST[ 'email' ]) . '\',';
+                    $query.= '\'' . mysqli_real_escape_string($_POST[ 'username' ]) . '\',';
+                    $query.= 'PASSWORD(\'' . mysqli_real_escape_string($_POST[ 'password' ]) . '\'),';
+                    $query.= '\'' . mysqli_real_escape_string($_POST[ 'email' ]) . '\',';
                     $query.= '0)';
         
-                    mysql_query($query);
+                    mysqli_query($query);
                 
                     rc('[[report:Special:NewUser]] new //' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=User+Admin * ' . $_POST[ 'username' ] . ' * New User');
                 

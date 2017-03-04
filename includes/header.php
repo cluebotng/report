@@ -12,12 +12,12 @@
         require_once $page;
     }
     
-    $mysql = mysql_connect($dbHost, $dbUser, $dbPass);
+    $mysql = mysqli_connect($dbHost, $dbUser, $dbPass);
     if (!$mysql) {
         die('Error.  Could not connect to database.');
     }
     
-    if (!mysql_select_db($dbSchema)) {
+    if (!mysqli_select_db($dbSchema)) {
         die('Error.  Database has insufficient permissions.');
     }
     

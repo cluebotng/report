@@ -21,7 +21,7 @@ $statuses = array(
 $query = "SELECT * FROM `reports`";
 if (isset($_REQUEST['status']) && !empty($_REQUEST['status'])) {
     if (array_key_exists($_REQUEST['status'], $statuses)) {
-        $query .= " WHERE `status` = '" . mysql_real_escape_string($_REQUEST['status']) . "'";
+        $query .= " WHERE `status` = '" . mysqli_real_escape_string($_REQUEST['status']) . "'";
     } else {
         $data = array(
             "error" => "argument_error",
@@ -31,9 +31,9 @@ if (isset($_REQUEST['status']) && !empty($_REQUEST['status'])) {
     }
 }
 
-$result = mysql_query($query);
-if (mysql_num_rows($result) > 0) {
-    while ($row = mysql_fetch_assoc($result)) {
+$result = mysqli_query($query);
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
         $data['revertid-' . $row['revertid']] = array(
                 "revertid" => $row['revertid'],
                 "timestamp" => strtotime($row['timestamp']),
@@ -43,9 +43,9 @@ if (mysql_num_rows($result) > 0) {
                 "comments" => array(),
          );
 
-        $cresult = mysql_query("SELECT * FROM `comments` WHERE `revertid` = '" . mysql_real_escape_string($row['revertid']) . "'");
-        if (mysql_num_rows($cresult) > 0) {
-            while ($crow = mysql_fetch_assoc($cresult)) {
+        $cresult = mysqli_query("SELECT * FROM `comments` WHERE `revertid` = '" . mysqli_real_escape_string($row['revertid']) . "'");
+        if (mysqli_num_rows($cresult) > 0) {
+            while ($crow = mysqli_fetch_assoc($cresult)) {
                 $data['revertid-' . $row['revertid']]['comments']['commmentid-' . $crow['commentid']] = array(
                             "commentid" => $crow['commentid'],
                             "timestamp" => strtotime($crow['timestamp']),
