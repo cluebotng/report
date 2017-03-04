@@ -31,7 +31,7 @@ if (isset($_REQUEST['admin'])) {
     }
 }
 
-$result = mysqli_query($query);
+$result = mysqli_query($mysql, $query);
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
         $data['userid-' . $row['userid']] = array(

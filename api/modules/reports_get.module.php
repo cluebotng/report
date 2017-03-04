@@ -29,7 +29,7 @@ if (isset($_REQUEST['rid']) && !empty($_REQUEST['rid'])) {
     die(output_encoding($data));
 }
 
-$result = mysqli_query($query);
+$result = mysqli_query($mysql, $query);
 if (mysqli_num_rows($result) === 1) {
     $row = mysqli_fetch_assoc($result);
     $data =array(
@@ -41,7 +41,7 @@ if (mysqli_num_rows($result) === 1) {
         "comments" => array(),
     );
 
-    $cresult = mysqli_query("SELECT * FROM `comments` WHERE `revertid` = '" . mysqli_real_escape_string($row['revertid']) . "'");
+    $cresult = mysqli_query($mysql, "SELECT * FROM `comments` WHERE `revertid` = '" . mysqli_real_escape_string($row['revertid']) . "'");
     if (mysqli_num_rows($cresult) > 0) {
         while ($crow = mysqli_fetch_assoc($cresult)) {
             $data['comments']['commmentid-' . $crow['commentid']] = array(

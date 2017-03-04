@@ -20,7 +20,7 @@
                 die();
             }
             
-            $result = mysqli_query('SELECT * FROM `vandalism` WHERE `id` = \'' . mysqli_real_escape_string($_REQUEST[ 'id' ]) . '\'');
+            $result = mysqli_query($mysql, 'SELECT * FROM `vandalism` WHERE `id` = \'' . mysqli_real_escape_string($_REQUEST[ 'id' ]) . '\'');
             $this->row = mysqli_fetch_assoc($result);
         }
         

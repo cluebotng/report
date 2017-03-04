@@ -31,7 +31,7 @@ if (isset($_REQUEST['status']) && !empty($_REQUEST['status'])) {
     }
 }
 
-$result = mysqli_query($query);
+$result = mysqli_query($mysql, $query);
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
         $data['revertid-' . $row['revertid']] = array(
@@ -43,7 +43,7 @@ if (mysqli_num_rows($result) > 0) {
                 "comments" => array(),
          );
 
-        $cresult = mysqli_query("SELECT * FROM `comments` WHERE `revertid` = '" . mysqli_real_escape_string($row['revertid']) . "'");
+        $cresult = mysqli_query($mysql, "SELECT * FROM `comments` WHERE `revertid` = '" . mysqli_real_escape_string($row['revertid']) . "'");
         if (mysqli_num_rows($cresult) > 0) {
             while ($crow = mysqli_fetch_assoc($cresult)) {
                 $data['revertid-' . $row['revertid']]['comments']['commmentid-' . $crow['commentid']] = array(

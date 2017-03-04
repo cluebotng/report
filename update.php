@@ -57,7 +57,7 @@
         }
     }
     
-    $result = mysqli_query('SELECT `revertid`, `new_id` FROM `reports` JOIN `vandalism` ON `revertid` = `id` WHERE `status` = 2 OR `status` = 5 OR `status` = 6');
+    $result = mysqli_query($mysql, 'SELECT `revertid`, `new_id` FROM `reports` JOIN `vandalism` ON `revertid` = `id` WHERE `status` = 2 OR `status` = 5 OR `status` = 6');
     if (!$result) {
         die(mysqli_error());
     }

@@ -21,7 +21,7 @@ if (isset($_REQUEST['uid'])) {
     die(output_encoding($data));
 }
 
-$result = mysqli_query($query);
+$result = mysqli_query($mysql, $query);
 if (mysqli_num_rows($result) === 1) {
     $row = mysqli_fetch_assoc($result);
     $data = array(

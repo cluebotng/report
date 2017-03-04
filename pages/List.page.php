@@ -10,7 +10,7 @@
             } else {
                 $where = '';
             }
-            $result = mysqli_query('SELECT `revertid`, `reporter`, `status` FROM `reports`' . $where . ' ORDER BY `status` ASC');
+            $result = mysqli_query($mysql, 'SELECT `revertid`, `reporter`, `status` FROM `reports`' . $where . ' ORDER BY `status` ASC');
             $this->ids = array();
             while ($row = mysqli_fetch_assoc($result)) {
                 $this->ids[] = array(

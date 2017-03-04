@@ -40,7 +40,7 @@
         $query.= '0';
         $query.= ')';
 
-        mysqli_query($query);
+        mysqli_query($mysql, $query);
 
         rc('[[report:' . $id . ']] new https://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=View&id=' . $id . ' * ' . $user . ' * New Report');
     }
@@ -65,14 +65,14 @@
         $query.= '\'' . mysqli_real_escape_string($comment) . '\'';
         $query.= ')';
 
-        mysqli_query($query);
+        mysqli_query($mysql, $query);
 
         rc('[[report:' . $id . ']] comment https://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=View&id=' . $id . ' * ' . $user . ' * ' . $comment);
     }
 
     function updateStatusIfIncorrect($id, $statusId, $username)
     {
-        $row = mysqli_fetch_assoc(mysqli_query('SELECT `status` FROM `reports` WHERE `revertid` = \'' . mysqli_real_escape_string($id) . '\''));
+        $row = mysqli_fetch_assoc(mysqli_query($mysql, 'SELECT `status` FROM `reports` WHERE `revertid` = \'' . mysqli_real_escape_string($id) . '\''));
         if ($row[ 'status' ] != $statusId) {
             updateStatus($id, $statusId, $username);
         }
@@ -80,14 +80,14 @@
 
     function updateStatus($id, $statusId, $username)
     {
-        mysqli_query('UPDATE `reports` SET `status` = \'' . mysqli_real_escape_string($statusId) . '\' WHERE `revertid` = \'' . mysqli_real_escape_string($id) . '\'');
+        mysqli_query($mysql, 'UPDATE `reports` SET `status` = \'' . mysqli_real_escape_string($statusId) . '\' WHERE `revertid` = \'' . mysqli_real_escape_string($id) . '\'');
         createComment($id, 'System', $username . ' has marked this report as "' . statusIdToName($statusId) . '".', true);
     }
 
     function getReport($id)
     {
         $id = '\'' . mysqli_real_escape_string($id) . '\'';
-        $result = mysqli_query(
+        $result = mysqli_query($mysql,
             'SELECT `revertid`, UNIX_TIMESTAMP(`timestamp`) AS `time`, `reporterid`, `reporter`, `status`
 			FROM `reports`
 			WHERE `revertid` = ' . $id
@@ -108,7 +108,7 @@
             'comments' => array()
         );
 
-        $result = mysqli_query(
+        $result = mysqli_query($mysql, 
             'SELECT `commentid`, UNIX_TIMESTAMP( `timestamp` ) AS `time`, `userid`, `user`, `comment`
 			FROM `comments`
 			WHERE `revertid` = ' . $id
@@ -127,7 +127,7 @@
 
         foreach ($data[ 'comments' ] as &$comment) {
             if ($comment[ 'userid' ] != -1) {
-                $row = mysqli_fetch_assoc(mysqli_query('SELECT `admin`, `superadmin` FROM `users` WHERE `userid` = ' . $comment[ 'userid' ]));
+                $row = mysqli_fetch_assoc(mysqli_query($mysql, 'SELECT `admin`, `superadmin` FROM `users` WHERE `userid` = ' . $comment[ 'userid' ]));
                 if ($row and $row[ 'admin' ] == 1) {
                     $comment[ 'admin' ] = true;
                 } else {
@@ -175,7 +175,7 @@
     function rc($line)
     {
         global $rcport;
-        $r = mysqli_fetch_assoc(mysqli_query('SELECT `node` from `cluster_node` where type="relay"'));
+        $r = mysqli_fetch_assoc(mysqli_query($mysql, 'SELECT `node` from `cluster_node` where type="relay"'));
         if (!$r) {return;}
         $rc = fsockopen('udp://' . $r['node'], $rcport);
         $line = str_replace(array( "\r", "\n" ), array( '', '/' ), $line);

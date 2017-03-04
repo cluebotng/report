@@ -23,7 +23,7 @@
                         }
 
                         $query .= " WHERE `userid` = '" . mysqli_real_escape_string($_SESSION[ 'userid' ]) . "'";
-                        mysqli_query($query);
+                        mysqli_query($mysql, $query);
 
                         header('Location: ?page=Options&done');
                         die();

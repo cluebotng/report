@@ -7,7 +7,7 @@
                 $query = 'SELECT `userid`, `username`, `admin`, `superadmin`, `next_on_review`, `email` FROM `users` WHERE `username` = ';
                 $query.= '\'' . mysqli_real_escape_string($_POST[ 'username' ]) . '\' AND `password` = ';
                 $query.= 'PASSWORD(\'' . mysqli_real_escape_string($_POST[ 'password' ]) . '\')';
-                $row = mysqli_fetch_assoc(mysqli_query($query));
+                $row = mysqli_fetch_assoc(mysqli_query($mysql, $query));
                 if ($row) {
                     $_SESSION[ 'userid' ] = $row[ 'userid' ];
                     $_SESSION[ 'next_on_review' ] = $row[ 'next_on_review' ] ? true : false;

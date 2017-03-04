@@ -16,7 +16,7 @@
                     $query.= '\'' . mysqli_real_escape_string($_POST[ 'email' ]) . '\',';
                     $query.= '0)';
         
-                    mysqli_query($query);
+                    mysqli_query($mysql, $query);
                 
                     rc('[[report:Special:NewUser]] new //' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=User+Admin * ' . $_POST[ 'username' ] . ' * New User');
                 
