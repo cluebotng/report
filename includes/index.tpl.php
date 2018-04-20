@@ -5,6 +5,7 @@
 	<link type='text/css' rel='stylesheet' href='index.css'>
 	<link type='text/css' rel='stylesheet' href='diff.css'>
 	<title>ClueBot NG Report Interface</title>
+	<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 	<div id="top">

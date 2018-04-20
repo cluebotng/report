@@ -1,13 +1,10 @@
 <?PHP
     class CreateAccountPage extends Page
     {
-        public function __construct()
-        {
-            global $recaptcha_privkey;
+        public function __construct() {
             $this->bad_captca = false;
             if (isset($_POST[ 'submit' ])) {
-                $resp = recaptcha_check_answer($recaptcha_privkey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-                if (!$resp->is_valid) {
+                if (!recaptca_is_valid()) {
                     $this->bad_captca = true;
                 } else {
                     $query = 'INSERT INTO `users` (`username`,`password`,`email`,`admin`) VALUES (';
@@ -33,7 +30,6 @@
         
         public function writeContent()
         {
-            global $recaptcha_pubkey;
             echo '<form method="post">';
             echo '<table>';
             if ($this->bad_captca === true) {
@@ -42,7 +38,7 @@
             echo '<tr><th>Username:</th><td><input type="text" name="username" /></td></tr>';
             echo '<tr><th>Password:</th><td><input type="password" name="password" /></td></tr>';
             echo '<tr><th>E-mail:</th><td><input type="text" name="email" /></td></tr>';
-            echo recaptcha_get_html($recaptcha_pubkey);
+            echo '<tr><th>Captcha:</th><td><div class="g-recaptcha" data-sitekey="6LdYiFQUAAAAAATBndPVw4OeBIHrW-1zKUOodoYZ"></div></td></tr>';
             echo '<tr><td colspan=2><input type="submit" name="submit" value="Register" /></td></tr>';
             echo '</table>';
             echo '</form>';

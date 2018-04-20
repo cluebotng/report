@@ -5,6 +5,5 @@
 	$dbSchema = '';
 	$rchost = '';
 	$rcport = 3333;
-	$recaptcha_pubkey = "";
-	$recaptcha_privkey = "";
+	$recaptcha_secret = "";
 ?>

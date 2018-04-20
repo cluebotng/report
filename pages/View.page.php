@@ -4,10 +4,9 @@
         private $row;
         private $id;
         private $data;
-        
+
         public function __construct()
         {
-            global $recaptcha_privkey;
             $this->id = $_REQUEST[ 'id' ];
             $result = mysql_query('SELECT * FROM `vandalism` WHERE `id` = \'' . mysql_real_escape_string($this->id) . '\'');
             $this->row = mysql_fetch_assoc($result);
@@ -21,8 +20,7 @@
                 if (trim($_POST[ 'comment' ]) != '') {
                     $this->bad_captca = false;
                     if (!isset($_SESSION[ 'username' ])) {
-                        $resp = recaptcha_check_answer($recaptcha_privkey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-                        if (!$resp->is_valid) {
+                        if(!recaptca_is_valid()) {
                             $this->bad_captca = true;
                         }
                     }
@@ -69,7 +67,6 @@
         
         public function writeContent()
         {
-            global $recaptcha_pubkey;
             require 'pages/View.tpl.php';
         }
     }

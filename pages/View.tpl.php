@@ -150,19 +150,22 @@
     echo $_POST['comment'];
 } ?></textarea></td>
 		</tr>
-		<tr>
-		<?php
-        if ($user == 'Anonymous') {
-            echo recaptcha_get_html($recaptcha_pubkey);
-        }
-        if (isset($this->bad_captca) && $this->bad_captca === true) {
-            echo 'BAD CAPTCHA! TRY AGAIN!';
-        }
-        if (isset($this->bad_comment) && $this->bad_comment === true) {
-            echo 'Please do not attempt to put links in the comments. They will not work';
-        }
+<?php
+    if (isset($this->bad_captca) && $this->bad_captca === true) {
+        echo 'BAD CAPTCHA! TRY AGAIN!';
+    }
+    if (isset($this->bad_comment) && $this->bad_comment === true) {
+        echo 'Please do not attempt to put links in the comments. They will not work';
+    }
+    if ($user == 'Anonymous') {
 ?>
+		<tr>
+			<th>Captcha:</th>
+			<td><div class="g-recaptcha" data-sitekey="6LdYiFQUAAAAAATBndPVw4OeBIHrW-1zKUOodoYZ"></div></td>
 		</tr>
+<?php
+    }
+?>
 		<tr>
 			<td colspan=2><input type="submit" name="submit" value="Post comment" /></td>
 		</tr>
