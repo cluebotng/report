@@ -3,11 +3,12 @@
     {
         public function __construct()
         {
+            global $mysql;
             if (isset($_POST[ 'submit' ])) {
                 $query = 'SELECT `userid`, `username`, `admin`, `superadmin`, `next_on_review`, `email` FROM `users` WHERE `username` = ';
-                $query.= '\'' . mysql_real_escape_string($_POST[ 'username' ]) . '\' AND `password` = ';
-                $query.= 'PASSWORD(\'' . mysql_real_escape_string($_POST[ 'password' ]) . '\')';
-                $row = mysql_fetch_assoc(mysql_query($query));
+                $query.= '\'' . mysqli_real_escape_string($mysql, $_POST[ 'username' ]) . '\' AND `password` = ';
+                $query.= 'PASSWORD(\'' . mysqli_real_escape_string($mysql, $_POST[ 'password' ]) . '\')';
+                $row = mysqli_fetch_assoc(mysqli_query($mysql, $query));
                 if ($row) {
                     $_SESSION[ 'userid' ] = $row[ 'userid' ];
                     $_SESSION[ 'next_on_review' ] = $row[ 'next_on_review' ] ? true : false;

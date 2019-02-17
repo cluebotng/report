@@ -1,19 +1,21 @@
 <?PHP
     class CreateAccountPage extends Page
     {
+        private $bad_captca;
         public function __construct() {
+            global $mysql;
             $this->bad_captca = false;
             if (isset($_POST[ 'submit' ])) {
                 if (!recaptca_is_valid()) {
                     $this->bad_captca = true;
                 } else {
                     $query = 'INSERT INTO `users` (`username`,`password`,`email`,`admin`) VALUES (';
-                    $query.= '\'' . mysql_real_escape_string($_POST[ 'username' ]) . '\',';
-                    $query.= 'PASSWORD(\'' . mysql_real_escape_string($_POST[ 'password' ]) . '\'),';
-                    $query.= '\'' . mysql_real_escape_string($_POST[ 'email' ]) . '\',';
+                    $query.= '\'' . mysqli_real_escape_string($mysql, $_POST[ 'username' ]) . '\',';
+                    $query.= 'PASSWORD(\'' . mysqli_real_escape_string($mysql, $_POST[ 'password' ]) . '\'),';
+                    $query.= '\'' . mysqli_real_escape_string($mysql, $_POST[ 'email' ]) . '\',';
                     $query.= '0)';
         
-                    mysql_query($query);
+                    mysqli_query($mysql, $query);
                 
                     rc('[[report:Special:NewUser]] new //' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=User+Admin * ' . $_POST[ 'username' ] . ' * New User');
                 

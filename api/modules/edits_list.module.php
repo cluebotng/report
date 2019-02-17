@@ -28,7 +28,7 @@ if (isset($_REQUEST['eid']) && !empty($_REQUEST['eid'])) {
         $query .= " WHERE";
     }
 
-    $query .= " `id` >= '" . mysql_real_escape_string($_REQUEST['eid']) . "'";
+    $query .= " `id` >= '" . mysqli_real_escape_string($mysql, $_REQUEST['eid']) . "'";
 }
 
 if (isset($_REQUEST['user']) && !empty($_REQUEST['user'])) {
@@ -37,7 +37,7 @@ if (isset($_REQUEST['user']) && !empty($_REQUEST['user'])) {
         $query .= " WHERE";
     }
 
-    $query .= " `user` = '" . mysql_real_escape_string($_REQUEST['user']) . "'";
+    $query .= " `user` = '" . mysqli_real_escape_string($mysql, $_REQUEST['user']) . "'";
 }
 
 if (isset($_REQUEST['article']) && !empty($_REQUEST['article'])) {
@@ -46,7 +46,7 @@ if (isset($_REQUEST['article']) && !empty($_REQUEST['article'])) {
         $query .= " WHERE";
     }
 
-    $query .= " `article` = '" . mysql_real_escape_string($_REQUEST['article']) . "'";
+    $query .= " `article` = '" . mysqli_real_escape_string($mysql, $_REQUEST['article']) . "'";
 }
 
 if (isset($_REQUEST['heuristic']) && !empty($_REQUEST['heuristic'])) {
@@ -55,7 +55,7 @@ if (isset($_REQUEST['heuristic']) && !empty($_REQUEST['heuristic'])) {
         $query .= " WHERE";
     }
 
-    $query .= " `heuristic` = '" . mysql_real_escape_string($_REQUEST['heuristic']) . "'";
+    $query .= " `heuristic` = '" . mysqli_real_escape_string($mysql, $_REQUEST['heuristic']) . "'";
 }
 
 if (isset($_REQUEST['regex']) && !empty($_REQUEST['regex'])) {
@@ -64,7 +64,7 @@ if (isset($_REQUEST['regex']) && !empty($_REQUEST['regex'])) {
         $query .= " WHERE";
     }
 
-    $query .= " `regex` = '" . mysql_real_escape_string($_REQUEST['regex']) . "'";
+    $query .= " `regex` = '" . mysqli_real_escape_string($mysql, $_REQUEST['regex']) . "'";
 }
 
 if (isset($_REQUEST['old_id']) && !empty($_REQUEST['old_id'])) {
@@ -73,7 +73,7 @@ if (isset($_REQUEST['old_id']) && !empty($_REQUEST['old_id'])) {
         $query .= " WHERE";
     }
 
-    $query .= " `old_id` = '" . mysql_real_escape_string($_REQUEST['old_id']) . "'";
+    $query .= " `old_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['old_id']) . "'";
 }
 
 if (isset($_REQUEST['new_id']) && !empty($_REQUEST['new_id'])) {
@@ -82,7 +82,7 @@ if (isset($_REQUEST['new_id']) && !empty($_REQUEST['new_id'])) {
         $query .= " WHERE";
     }
 
-    $query .= " `new_id` = '" . mysql_real_escape_string($_REQUEST['new_id']) . "'";
+    $query .= " `new_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['new_id']) . "'";
 }
 
 if (isset($_REQUEST['reverted']) && !empty($_REQUEST['reverted'])) {
@@ -91,12 +91,12 @@ if (isset($_REQUEST['reverted']) && !empty($_REQUEST['reverted'])) {
         $query .= " WHERE";
     }
 
-    $query .= " `reverted` = '" . mysql_real_escape_string($_REQUEST['reverted']) . "'";
+    $query .= " `reverted` = '" . mysqli_real_escape_string($mysql, $_REQUEST['reverted']) . "'";
 }
 
-$result = mysql_query($query);
-if (mysql_num_rows($result) > 0) {
-    while ($row = mysql_fetch_assoc($result)) {
+$result = mysqli_query($mysql, $query);
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
         $data['edit-' . $row['id']] = array(
             "id" => $row['id'],
             "timestamp" => $row['timestamp'],
@@ -119,19 +119,19 @@ if (mysql_num_rows($result) > 0) {
             $data['edit-' . $row['id']]['score'] = (Float) $matches[1];
         }
 
-        $bresult = mysql_query("SELECT * FROM `beaten` WHERE `diff` = '" . mysql_real_escape_string($row['diff']) . "'");
-        if (mysql_num_rows($bresult) > 0) {
+        $bresult = mysqli_query($mysql, "SELECT * FROM `beaten` WHERE `diff` = '" . mysqli_real_escape_string($mysql, $row['diff']) . "'");
+        if (mysqli_num_rows($bresult) > 0) {
             $data['edit-' . $row['id']]['beaten'] = 1;
 
-            $brow = mysql_fetch_assoc($bresult);
+            $brow = mysqli_fetch_assoc($bresult);
             $data['edit-' . $row['id']]['beaten_by'] = $brow['user'];
         }
 
-        $fpresult = mysql_query("SELECT * FROM `reports` WHERE `revertid` = '" . mysql_real_escape_string($row['id']) . "'");
-        if (mysql_num_rows($fpresult) > 0) {
+        $fpresult = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['id']) . "'");
+        if (mysqli_num_rows($fpresult) > 0) {
             $data['edit-' . $row['id']]['fp_submitted'] = 1;
 
-            $fprow = mysql_fetch_assoc($fpresult);
+            $fprow = mysqli_fetch_assoc($fpresult);
             $data['edit-' . $row['id']]['fp_data'] = array(
                     "timestamp" => strtotime($fprow['timestamp']),
                     "reporterid" => $fprow['reporterid'],
@@ -141,9 +141,9 @@ if (mysql_num_rows($result) > 0) {
                     "comments" => array(),
             );
 
-            $fpcresult = mysql_query("SELECT * FROM `comments` WHERE `revertid` = '" . mysql_real_escape_string($row['id']) . "'");
-            if (mysql_num_rows($fpcresult) > 0) {
-                while ($fpcrow = mysql_fetch_assoc($fpcresult)) {
+            $fpcresult = mysqli_query($mysql, "SELECT * FROM `comments` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['id']) . "'");
+            if (mysqli_num_rows($fpcresult) > 0) {
+                while ($fpcrow = mysqli_fetch_assoc($fpcresult)) {
                     $data['edit-' . $row['id']]['fp_data']['comments']['commentid-' . $fpcrow['commentid']] = array(
                                     "timestamp" => strtotime($fpcrow['timestamp']),
                                     "user" => $fpcrow['user'],

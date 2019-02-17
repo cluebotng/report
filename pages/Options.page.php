@@ -3,6 +3,7 @@
     {
                 public function __construct()
                 {
+                    global $mysql;
                     if (isset($_POST[ 'submit' ])) {
                         if (isset($_POST[ 'next_on_review' ]) && $_POST[ 'next_on_review'] === "Yes") {
                             $next_on_review = 1;
@@ -10,20 +11,20 @@
                             $next_on_review = 0;
                         }
 
-                        $query = "UPDATE `users` SET `next_on_review` = '" . mysql_real_escape_string($next_on_review) . "'";
+                        $query = "UPDATE `users` SET `next_on_review` = '" . mysqli_real_escape_string($mysql, $next_on_review) . "'";
                         $_SESSION[ 'next_on_review' ] = ($next_on_review) ? true : false;
 
                         if (trim($_POST[ 'email' ]) != "") {
-                            $query .= ", `email` = '" . mysql_real_escape_string($_POST[ 'email' ]) . "'";
-                            $_SESSION[ 'email' ] = mysql_real_escape_string($_POST[ 'email' ]);
+                            $query .= ", `email` = '" . mysqli_real_escape_string($mysql, $_POST[ 'email' ]) . "'";
+                            $_SESSION[ 'email' ] = mysqli_real_escape_string($mysql, $_POST[ 'email' ]);
                         }
 
                         if (trim($_POST[ 'password' ]) != "") {
-                            $query .= ", `password` = PASSWORD('" . mysql_real_escape_string($_POST[ 'password' ]) . "')";
+                            $query .= ", `password` = PASSWORD('" . mysqli_real_escape_string($mysql, $_POST[ 'password' ]) . "')";
                         }
 
-                        $query .= " WHERE `userid` = '" . mysql_real_escape_string($_SESSION[ 'userid' ]) . "'";
-                        mysql_query($query);
+                        $query .= " WHERE `userid` = '" . mysqli_real_escape_string($mysql, $_SESSION[ 'userid' ]) . "'";
+                        mysqli_query($mysql, $query);
 
                         header('Location: ?page=Options&done');
                         die();

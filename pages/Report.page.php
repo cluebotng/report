@@ -5,6 +5,7 @@
         
         public function __construct()
         {
+            global $mysql;
             $id = $_REQUEST[ 'id' ];
             
             if (isset($_POST[ 'submit' ])) {
@@ -20,8 +21,8 @@
                 die();
             }
             
-            $result = mysql_query('SELECT * FROM `vandalism` WHERE `id` = \'' . mysql_real_escape_string($_REQUEST[ 'id' ]) . '\'');
-            $this->row = mysql_fetch_assoc($result);
+            $result = mysqli_query($mysql, 'SELECT * FROM `vandalism` WHERE `id` = \'' . mysqli_real_escape_string($mysql, $_REQUEST[ 'id' ]) . '\'');
+            $this->row = mysqli_fetch_assoc($result);
         }
         
         public function writeHeader()
@@ -37,7 +38,6 @@
             echo '<tr><th>ID:</th><td><input type="hidden" name="id" value="' . $this->row[ 'id' ] . '" />' . $this->row[ 'id' ] . '</td></tr>';
             echo '<tr><th>User:</th><td>' . $this->row[ 'user' ] . '</td></tr>';
             echo '<tr><th>Article:</th><td>' . $this->row[ 'article' ] . '</td></tr>';
-//			echo '<tr><th>Diff:</th><td><a href="' . $this->row[ 'diff' ] . '">[1]</a></td></tr>';
             echo '<tr><th>Diff:</th><td style="border: 1px dashed #000000">';
             echo file_get_contents('https://en.wikipedia.org/w/index.php?diffonly=1&action=render&diff=' . urlencode($this->row[ 'new_id' ]));
             echo '</td></tr>';

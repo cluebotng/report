@@ -10,9 +10,9 @@ $data = array(
 $query = "SELECT * FROM `users`";
 
 if (isset($_REQUEST['uid'])) {
-    $query .= " WHERE `userid` = '" . mysql_real_escape_string($_REQUEST['uid']) . "'";
+    $query .= " WHERE `userid` = '" . mysqli_real_escape_string($mysql, $_REQUEST['uid']) . "'";
 } elseif (isset($_REQUEST['username'])) {
-    $query .= " WHERE `username` = '" . mysql_real_escape_string($_REQUEST['username']) . "'";
+    $query .= " WHERE `username` = '" . mysqli_real_escape_string($mysql, $_REQUEST['username']) . "'";
 } else {
     $data = array(
     "error" => "argument_error",
@@ -21,9 +21,9 @@ if (isset($_REQUEST['uid'])) {
     die(output_encoding($data));
 }
 
-$result = mysql_query($query);
-if (mysql_num_rows($result) === 1) {
-    $row = mysql_fetch_assoc($result);
+$result = mysqli_query($mysql, $query);
+if (mysqli_num_rows($result) === 1) {
+    $row = mysqli_fetch_assoc($result);
     $data = array(
       "userid" => $row['userid'],
       "username" => $row['username'],

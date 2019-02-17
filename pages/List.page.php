@@ -5,14 +5,15 @@
         
         public function __construct()
         {
+            global $mysql;
             if (!isset($_REQUEST[ 'showall' ])) {
                 $where = ' WHERE `status` = 0 OR `status` = 3 OR `status` IN (2,5,6)';
             } else {
                 $where = '';
             }
-            $result = mysql_query('SELECT `revertid`, `reporter`, `status` FROM `reports`' . $where . ' ORDER BY `status` ASC');
+            $result = mysqli_query($mysql, 'SELECT `revertid`, `reporter`, `status` FROM `reports`' . $where . ' ORDER BY `status` ASC');
             $this->ids = array();
-            while ($row = mysql_fetch_assoc($result)) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 $this->ids[] = array(
                     'id' => $row[ 'revertid' ],
                     'user' => $row[ 'reporter' ],

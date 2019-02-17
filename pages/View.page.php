@@ -4,12 +4,15 @@
         private $row;
         private $id;
         private $data;
+        private $bad_captca;
+        private $bad_comment;
 
         public function __construct()
         {
+            global $mysql;
             $this->id = $_REQUEST[ 'id' ];
-            $result = mysql_query('SELECT * FROM `vandalism` WHERE `id` = \'' . mysql_real_escape_string($this->id) . '\'');
-            $this->row = mysql_fetch_assoc($result);
+            $result = mysqli_query($mysql, 'SELECT * FROM `vandalism` WHERE `id` = \'' . mysqli_real_escape_string($mysql, $this->id) . '\'');
+            $this->row = mysqli_fetch_assoc($result);
             $this->data = getReport($this->id);
             if ($this->data === null) {
                 header('Location: ?page=Report&id=' . $this->id);
@@ -42,9 +45,9 @@
                 updateStatus($this->id, $_REQUEST[ 'status' ], $_SESSION[ 'username' ]);
 
                 if (isset($_SESSION[ 'next_on_review' ]) && $_SESSION[ 'next_on_review' ] === true) {
-                    $result = mysql_query("SELECT * FROM `reports` WHERE `status` = 0 ORDER BY RAND() LIMIT 0, 1");
-                    if (is_resource($result) && mysql_num_rows($result) > 0) {
-                        $row = mysql_fetch_assoc($result);
+                    $result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `status` = 0 ORDER BY RAND() LIMIT 0, 1");
+                    if (mysqli_num_rows($result) > 0) {
+                        $row = mysqli_fetch_assoc($result);
                         header('Location: ?page=View&id=' . $row['revertid']);
                         die();
                     }
@@ -54,7 +57,7 @@
                 die();
             }
             if (isset($_REQUEST[ 'deletecomment' ]) and isSAdmin()) {
-                mysql_query('DELETE FROM `comments` WHERE `commentid` = \'' . mysql_real_escape_string($_REQUEST[ 'deletecomment' ]) . '\'');
+                mysqli_query($mysql, 'DELETE FROM `comments` WHERE `commentid` = \'' . mysqli_real_escape_string($mysql, $_REQUEST[ 'deletecomment' ]) . '\'');
                 header('Location: ?page=View&id=' . $this->id);
                 die();
             }

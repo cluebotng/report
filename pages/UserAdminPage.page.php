@@ -5,6 +5,7 @@
         
         public function __construct()
         {
+            global $mysql;
             if (!isSAdmin()) {
                 die('*sigh*');
             }
@@ -13,9 +14,9 @@
                 $set = null;
                 switch ($_REQUEST[ 'action' ]) {
                     case 'delete':
-                        mysql_query('UPDATE `comments` SET `userid` = -1 WHERE `userid` = \'' . mysql_real_escape_string($_REQUEST[ 'uid' ]) . '\'');
-                        mysql_query('UPDATE `reports` SET `reporterid` = -1 WHERE `reporterid` = \'' . mysql_real_escape_string($_REQUEST[ 'uid' ]) . '\'');
-                        mysql_query('DELETE FROM `users` WHERE `userid` = \'' . mysql_real_escape_string($_REQUEST[ 'uid' ]) . '\'');
+                        mysqli_query($mysql, 'UPDATE `comments` SET `userid` = -1 WHERE `userid` = \'' . mysqli_real_escape_string($mysql, $_REQUEST[ 'uid' ]) . '\'');
+                        mysqli_query($mysql, 'UPDATE `reports` SET `reporterid` = -1 WHERE `reporterid` = \'' . mysqli_real_escape_string($mysql, $_REQUEST[ 'uid' ]) . '\'');
+                        mysqli_query($mysql, 'DELETE FROM `users` WHERE `userid` = \'' . mysqli_real_escape_string($mysql, $_REQUEST[ 'uid' ]) . '\'');
                         break;
                     case 'superadmin':
                         $set = '`superadmin` = 1';
@@ -29,7 +30,7 @@
                 }
                 
                 if ($set !== null) {
-                    mysql_query('UPDATE `users` SET ' . $set . ' WHERE `userid` = \'' . mysql_real_escape_string($_REQUEST[ 'uid' ]) . '\'');
+                    mysqli_query($mysql, 'UPDATE `users` SET ' . $set . ' WHERE `userid` = \'' . mysqli_real_escape_string($mysql, $_REQUEST[ 'uid' ]) . '\'');
                 }
                 
                 rc('[[report:Special:UserAdmin]] ' . $_REQUEST[ 'action' ] . ' https://' . $_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'PHP_SELF' ] . '?page=User+Admin * ' . $_SESSION[ 'username' ] . ' * ' . $_REQUEST[ 'action' ] . ' ' . $_REQUEST[ 'user' ]);
@@ -38,9 +39,9 @@
                 die();
             }
             
-            $result = mysql_query('SELECT `userid`, `username`, `email`, `admin`, `superadmin` FROM `users`');
+            $result = mysqli_query($mysql, 'SELECT `userid`, `username`, `email`, `admin`, `superadmin` FROM `users`');
             $this->users = array();
-            while ($row = mysql_fetch_assoc($result)) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 $this->users[] = array(
                     'id' => $row[ 'userid' ],
                     'user' => $row[ 'username' ],
