@@ -1,0 +1,22 @@
+{
+    "name": "cluenet/cluebotng-report",
+    "description": "ClueBot NG - Report Interface",
+    "require-dev": {
+        "squizlabs/php_codesniffer": "@stable",
+        "phing/phing": "@stable",
+        "phploc/phploc": "@stable",
+        "phpmd/phpmd": "@stable",
+        "sebastian/phpcpd": "@stable"
+    },
+    "require": {
+        "php": ">=5.3.5",
+        "monolog/monolog": "^1.17"
+    },
+    "license": "GNU General Public License",
+    "authors": [
+        {
+            "name": "Damian Zaremba",
+            "email": "damian@damianzaremba.co.uk"
+        }
+    ]
+}
