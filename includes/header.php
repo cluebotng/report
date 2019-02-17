@@ -12,7 +12,7 @@ foreach (glob('pages/*.page.php') as $page) {
     require_once $page;
 }
 
-$mysql = mysqli_connect($mysql, $dbHost, $dbUser, $dbPass);
+$mysql = mysqli_connect($dbHost, $dbUser, $dbPass);
 if (!$mysql) {
     die('Error.  Could not connect to database.');
 }
