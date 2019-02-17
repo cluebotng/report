@@ -26,6 +26,7 @@ function statusNameToId($status)
 
 function createReport($id, $user)
 {
+    global $mysql;
     if (isset($_SESSION['userid'])) {
         $userid = $_SESSION['userid'];
         $user = $_SESSION['username'];
@@ -47,6 +48,7 @@ function createReport($id, $user)
 
 function createComment($id, $user, $comment, $forceUser = false)
 {
+    global $mysql;
     if (!$forceUser) {
         if (isset($_SESSION['userid'])) {
             $userid = $_SESSION['userid'];
@@ -72,6 +74,7 @@ function createComment($id, $user, $comment, $forceUser = false)
 
 function updateStatusIfIncorrect($id, $statusId, $username)
 {
+    global $mysql;
     $row = mysqli_fetch_assoc(mysqli_query($mysql, 'SELECT `status` FROM `reports` WHERE `revertid` = \'' . mysqli_real_escape_string($mysql, $id) . '\''));
     if ($row['status'] != $statusId) {
         updateStatus($id, $statusId, $username);
@@ -80,12 +83,14 @@ function updateStatusIfIncorrect($id, $statusId, $username)
 
 function updateStatus($id, $statusId, $username)
 {
+    global $mysql;
     mysqli_query($mysql, 'UPDATE `reports` SET `status` = \'' . mysqli_real_escape_string($mysql, $statusId) . '\' WHERE `revertid` = \'' . mysqli_real_escape_string($mysql, $id) . '\'');
     createComment($id, 'System', $username . ' has marked this report as "' . statusIdToName($statusId) . '".', true);
 }
 
 function getReport($id)
 {
+    global $mysql;
     $id = '\'' . mysqli_real_escape_string($mysql, $id) . '\'';
     $result = mysqli_query($mysql,
         'SELECT `revertid`, UNIX_TIMESTAMP(`timestamp`) AS `time`, `reporterid`, `reporter`, `status`
@@ -175,6 +180,7 @@ function isSAdmin()
 function rc($line)
 {
     global $rcport;
+    global $mysql;
     $r = mysqli_fetch_assoc(mysqli_query($mysql, 'SELECT `node` from `cluster_node` where type="relay"'));
     if (!$r) {
         return;
