@@ -25,14 +25,14 @@ if (isset($_REQUEST['rid']) && !empty($_REQUEST['rid'])) {
     $data = array(
         "error" => "argument_error",
         "error_message" => "Specified rid was in an invalid format",
-     );
+    );
     die(output_encoding($data));
 }
 
 $result = mysqli_query($mysql, $query);
 if (mysqli_num_rows($result) === 1) {
     $row = mysqli_fetch_assoc($result);
-    $data =array(
+    $data = array(
         "revertid" => $row['revertid'],
         "timestamp" => strtotime($row['timestamp']),
         "reporter" => $row['reporter'],
@@ -58,6 +58,6 @@ if (mysqli_num_rows($result) === 1) {
     $data = array(
         "error" => "argument_error",
         "error_message" => "Specified rid was not found",
-     );
+    );
     die(output_encoding($data));
 }

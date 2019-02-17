@@ -1,12 +1,13 @@
 <?php
 
-function recaptca_is_valid() {
+function recaptca_is_valid()
+{
     global $recaptcha_secret;
     $context = stream_context_create(array(
-        'http' => array (
+        'http' => array(
             'method' => 'POST',
             'content' => http_build_query(array(
-                'secret'   => $recaptcha_secret,
+                'secret' => $recaptcha_secret,
                 'response' => $_POST["g-recaptcha-response"]
             ))
         )

@@ -4,8 +4,7 @@
  * - Returns a specific edit in the database
  */
 
-$data = array(
- );
+$data = array();
 $statuses = array(
     'Reported',
     'Invalid',
@@ -32,7 +31,7 @@ if (isset($_REQUEST['eid']) && !empty($_REQUEST['eid'])) {
 } else {
     $data = array(
         "error" => "argument_error",
-            "error_message" => "You must specify eid, diff, old_id or new_id for this method.",
+        "error_message" => "You must specify eid, diff, old_id or new_id for this method.",
     );
     die(output_encoding($data));
 }
@@ -59,7 +58,7 @@ if (mysqli_num_rows($result) === 1) {
         );
 
         if (preg_match("/ANN scored at ([0-9.]+)/", $row['reason'], $matches) === 1) {
-            $data['edit-' . $row['id']]['score'] = (Float) $matches[1];
+            $data['edit-' . $row['id']]['score'] = (Float)$matches[1];
         }
 
         $bresult = mysqli_query($mysql, "SELECT * FROM `beaten` WHERE `diff` = '" . mysqli_real_escape_string($mysql, $row['diff']) . "'");
@@ -76,23 +75,23 @@ if (mysqli_num_rows($result) === 1) {
 
             $fprow = mysqli_fetch_assoc($fpresult);
             $data['edit-' . $row['id']]['fp_data'] = array(
-                    "timestamp" => strtotime($fprow['timestamp']),
-                    "reporterid" => $fprow['reporterid'],
-                    "reporter" => $fprow['reporter'],
-                    "status" => $fprow['status'],
-                    "friendly_status" => $statuses[$fprow['status']],
-                    "comments" => array(),
+                "timestamp" => strtotime($fprow['timestamp']),
+                "reporterid" => $fprow['reporterid'],
+                "reporter" => $fprow['reporter'],
+                "status" => $fprow['status'],
+                "friendly_status" => $statuses[$fprow['status']],
+                "comments" => array(),
             );
 
             $fpcresult = mysqli_query($mysql, "SELECT * FROM `comments` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['id']) . "'");
             if (mysqli_num_rows($fpcresult) > 0) {
                 while ($fpcrow = mysqli_fetch_assoc($fpcresult)) {
                     $data['edit-' . $row['id']]['fp_data']['comments']['commentid-' . $fpcrow['commentid']] = array(
-                                    "timestamp" => strtotime($fpcrow['timestamp']),
-                                    "user" => $fpcrow['user'],
-                                    "userid" => $fpcrow['userid'],
-                                    "comment" => $fpcrow['comment'],
-                            );
+                        "timestamp" => strtotime($fpcrow['timestamp']),
+                        "user" => $fpcrow['user'],
+                        "userid" => $fpcrow['userid'],
+                        "comment" => $fpcrow['comment'],
+                    );
                 }
             }
         }
@@ -105,24 +104,24 @@ if (mysqli_num_rows($result) === 1) {
                 if (isset($edit->{"ID"})) {
                     $data['edit-' . $row['id']]['review_submitted'] = 1;
 
-                    $required = (String) $edit->Required;
-                    $constructive = (String) $edit->Constructive;
-                    $skipped = (String) $edit->Skipped;
-                    $vandalism = (String) $edit->Vandalism;
+                    $required = (String)$edit->Required;
+                    $constructive = (String)$edit->Constructive;
+                    $skipped = (String)$edit->Skipped;
+                    $vandalism = (String)$edit->Vandalism;
                     $max = max($constructive, $skipped, $vandalism);
                     $sum = $constructive + $skipped + $vandalism;
 
                     $data['edit-' . $row['id']]['review_data'] = array(
-                                                        "scores" => array(
-                                                                "required" => $required,
-                                                                "constructive" => $constructive,
-                                                                "skipped" => $skipped,
-                                                                "vandalism" => $vandalism,
-                                                        ),
-                                                        "classification" => (String) $edit->Classification,
-                                                        "status" => (String) $edit->Status,
-                                                        "newclassification" => (String) $edit->NewClassification,
-                                                );
+                        "scores" => array(
+                            "required" => $required,
+                            "constructive" => $constructive,
+                            "skipped" => $skipped,
+                            "vandalism" => $vandalism,
+                        ),
+                        "classification" => (String)$edit->Classification,
+                        "status" => (String)$edit->Status,
+                        "newclassification" => (String)$edit->NewClassification,
+                    );
                 }
             }
         }

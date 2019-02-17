@@ -32,7 +32,7 @@ $ns = $api['ns'];
 $title = $api['title'];
 $timestamp = $api['revisions'][0]['timestamp'];;
 
-$cb = unserialize(file_get_contents('https://tools.wmflabs.org/cluebot/cb.php?user=' . urlencode($user) . '&ns=' . $ns. '&title=' . urlencode($title) . '&timestamp=' . urlencode($timestamp)));
+$cb = unserialize(file_get_contents('https://tools.wmflabs.org/cluebot/cb.php?user=' . urlencode($user) . '&ns=' . $ns . '&title=' . urlencode($title) . '&timestamp=' . urlencode($timestamp)));
 
 if (!isset($cb) || empty($cb) || !isset($api) || empty($api)) {
     $data = array(
@@ -169,8 +169,8 @@ while (!feof($fp)) {
 fclose($fp);
 
 $data = simplexml_load_string($returnXML);
-$score = (string) $data->WPEdit->score;
-$isVandalism = (string) $data->WPEdit->think_vandalism;
+$score = (string)$data->WPEdit->score;
+$isVandalism = (string)$data->WPEdit->think_vandalism;
 
 $data = array(
     "score" => $score,

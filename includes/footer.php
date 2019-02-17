@@ -1,2 +1,2 @@
 <?PHP
-    require 'includes/index.tpl.php';
+require 'includes/index.tpl.php';
