@@ -164,7 +164,7 @@ if (isset($_SESSION['username'])) {
             <tr>
                 <th>Captcha:</th>
                 <td>
-                    <div class="g-recaptcha" data-sitekey="6LdYiFQUAAAAAATBndPVw4OeBIHrW-1zKUOodoYZ"></div>
+                    <div class="g-recaptcha" data-sitekey="6LeLt64ZAAAAAFp9fyGDYMF49cdOMqQ79jUdUr1M"></div>
                 </td>
             </tr>
             <?php

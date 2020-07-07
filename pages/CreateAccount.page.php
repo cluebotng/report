@@ -43,7 +43,7 @@ class CreateAccountPage extends Page
         echo '<tr><th>Username:</th><td><input type="text" name="username" /></td></tr>';
         echo '<tr><th>Password:</th><td><input type="password" name="password" /></td></tr>';
         echo '<tr><th>E-mail:</th><td><input type="text" name="email" /></td></tr>';
-        echo '<tr><th>Captcha:</th><td><div class="g-recaptcha" data-sitekey="6LdYiFQUAAAAAATBndPVw4OeBIHrW-1zKUOodoYZ"></div></td></tr>';
+        echo '<tr><th>Captcha:</th><td><div class="g-recaptcha" data-sitekey="6LeLt64ZAAAAAFp9fyGDYMF49cdOMqQ79jUdUr1M"></div></td></tr>';
         echo '<tr><td colspan=2><input type="submit" name="submit" value="Register" /></td></tr>';
         echo '</table>';
         echo '</form>';
