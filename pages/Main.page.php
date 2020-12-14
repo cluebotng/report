@@ -19,7 +19,7 @@ class MainPage extends Page
 
         echo '<b>From the article:</b><br />';
         echo '<div class="image" style="width: 600px">';
-        echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/6/60/ClueBot_False_Positive_Method_2_Step_1.png/800px-ClueBot_False_Positive_Method_2_Step_1.png" width="600" height="63" /><br />';
+        echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/9/9a/ClueBot_False_Positive_Method_1_Step_1.png/799px-ClueBot_False_Positive_Method_1_Step_1.png" width="600" height="63" /><br />';
         echo '<small>Click the history tab at the top of the article.</small>';
         echo '</div>';
         echo '<div class="image" style="width: 600px">';
