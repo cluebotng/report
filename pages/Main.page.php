@@ -24,7 +24,7 @@ class MainPage extends Page
         echo '</div>';
         echo '<div class="image" style="width: 600px">';
         echo '<img alt="" src="upload.wikimedia.org/wikipedia/commons/1/10/ClueBot_False_Positive_Method_1_Step_2.png" width="600" height="180" class="thumbimage" /><br />';
-        echo '<small>The revert ID is in parenthesis right after "Thanks, User:ClueBot".</small>';
+        echo '<small>The revert ID is in parenthesis right after "Thanks, ClueBot NG".</small>';
         echo '</div>';
 
         echo '<b>From your talk page:</b><br />';
