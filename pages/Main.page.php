@@ -18,22 +18,22 @@ class MainPage extends Page
         echo '<h3>You need to get ClueBot NG\'s revert ID, there are two ways to do this:</h3>';
 
         echo '<b>From the article:</b><br />';
-        echo '<div class="image" style="width: 400px">';
-        echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/a/a3/CBFPHowto1.png/400px-CBFPHowto1.png" width="400" height="88" /><br />';
+        echo '<div class="image" style="width: 600px">';
+        echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/6/60/ClueBot_False_Positive_Method_2_Step_1.png/800px-ClueBot_False_Positive_Method_2_Step_1.png" width="600" height="63" /><br />';
         echo '<small>Click the history tab at the top of the article.</small>';
         echo '</div>';
         echo '<div class="image" style="width: 600px">';
-        echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/4/4d/CBFPHowto2.png/600px-CBFPHowto2.png" width="600" height="139" class="thumbimage" /><br />';
-        echo '<small>The revert ID is in parenthesis right after "Thanks, User:ClueBot".</small>';
+        echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/1/10/ClueBot_False_Positive_Method_1_Step_2.png/800px-ClueBot_False_Positive_Method_1_Step_2.png" width="600" height="180" class="thumbimage" /><br />';
+        echo '<small>The revert ID is in parenthesis right after "Thanks, ClueBot NG".</small>';
         echo '</div>';
 
         echo '<b>From your talk page:</b><br />';
-        echo '<div class="image" style="width: 400px">';
-        echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/7/72/CBFPHowto3.png/400px-CBFPHowto3.png" width="400" height="99" class="thumbimage" /><br />';
+        echo '<div class="image" style="width: 600px">';
+        echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/6/60/ClueBot_False_Positive_Method_2_Step_1.png/800px-ClueBot_False_Positive_Method_2_Step_1.png" width="600" height="60" class="thumbimage" /><br />';
         echo '<small>Click the "edit this page" tab at the top of the page.</small>';
         echo '</div>';
         echo '<div class="image" style="width: 600px">';
-        echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/0/0f/CBFPHowto4.png/600px-CBFPHowto4.png" width="600" height="298" class="thumbimage" /><br />';
+        echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/2/20/ClueBot_False_Positive_Method_2_Step_2.png/800px-ClueBot_False_Positive_Method_2_Step_2.png" width="600" height="241" class="thumbimage" /><br />';
         echo '<small>The revert ID is in the text right after "MySQL ID:".</small>';
         echo '</div>';
 
