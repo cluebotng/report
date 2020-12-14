@@ -18,7 +18,7 @@ class MainPage extends Page
         echo '<h3>You need to get ClueBot NG\'s revert ID, there are two ways to do this:</h3>';
 
         echo '<b>From the article:</b><br />';
-        echo '<div class="image" style="width: 400px">';
+        echo '<div class="image" style="width: 600px">';
         echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/9/9a/ClueBot_False_Positive_Method_1_Step_1.png" width="600" height="63" /><br />';
         echo '<small>Click the history tab at the top of the article.</small>';
         echo '</div>';
@@ -28,7 +28,7 @@ class MainPage extends Page
         echo '</div>';
 
         echo '<b>From your talk page:</b><br />';
-        echo '<div class="image" style="width: 400px">';
+        echo '<div class="image" style="width: 600px">';
         echo '<img alt="" src="//upload.wikimedia.org/wikipedia/commons/6/60/ClueBot_False_Positive_Method_2_Step_1.png" width="600" height="60" class="thumbimage" /><br />';
         echo '<small>Click the "edit this page" tab at the top of the page.</small>';
         echo '</div>';
