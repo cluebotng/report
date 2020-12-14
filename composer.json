@@ -8,6 +8,11 @@
         "phpmd/phpmd": "@stable",
         "sebastian/phpcpd": "@stable"
     },
+    "config": {
+        "platform": {
+            "php": "7.2.31"
+        }
+    },
     "require": {
         "php": ">=5.3.5",
         "monolog/monolog": "^1.17"
