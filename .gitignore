@@ -1,6 +1,6 @@
+# Config stuff
 web-settings.php
-*.py[co]
-*~
-.idea
+
+# Editor
+.idea/
 *.iml
-/vendor/

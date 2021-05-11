@@ -1,27 +1,18 @@
 {
-    "name": "cluenet/cluebotng-report",
+    "name": "cluebotng/report",
     "description": "ClueBot NG - Report Interface",
     "require-dev": {
+        "overtrue/phplint": "@stable",
         "squizlabs/php_codesniffer": "@stable",
-        "phing/phing": "@stable",
-        "phploc/phploc": "@stable",
-        "phpmd/phpmd": "@stable",
-        "sebastian/phpcpd": "@stable"
+        "phpmd/phpmd" : "@stable"
+    },
+    "require": {
+        "monolog/monolog": "^1.17"
     },
     "config": {
         "platform": {
-            "php": "7.2.31"
+            "php": "7.2"
         }
     },
-    "require": {
-        "php": ">=5.3.5",
-        "monolog/monolog": "^1.17"
-    },
-    "license": "GNU General Public License",
-    "authors": [
-        {
-            "name": "Damian Zaremba",
-            "email": "damian@damianzaremba.co.uk"
-        }
-    ]
+    "license": "GNU General Public License"
 }
