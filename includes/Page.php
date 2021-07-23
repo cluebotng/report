@@ -26,7 +26,7 @@ class Page
         }
 
         if (!$requireAdmin or (isset($_SESSION['sadmin']) and $_SESSION['sadmin'] === true)) {
-            self::$pages[$name] = array('visible' => $visible, 'class' => $className, 'sort' => $sort);
+            self::$pages[$name] = array('visible' => $visible, 'class' => '\\ReportInterface\\' . $className, 'sort' => $sort);
         }
     }
 
@@ -35,7 +35,7 @@ class Page
         if (isset(self::$pages[$name])) {
             $className = self::$pages[$name]['class'];
         } else {
-            $className = 'Page';
+            $className = '\\ReportInterface\\Page';
         }
 
         $page = new $className();
@@ -50,7 +50,7 @@ class Page
     public function writeNavigation()
     {
         echo '<ul>' . "\n";
-        uasort(self::$pages, array('Page', 'sortPages'));
+        uasort(self::$pages, array('\\ReportInterface\\Page', 'sortPages'));
         foreach (self::$pages as $name => $data) {
             if ($data['visible']) {
                 echo "\t" . '<li><a href="?page=' . urlencode($name) . '">' . htmlentities($name) . '</a></li>' . "\n";
