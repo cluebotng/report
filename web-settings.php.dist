@@ -3,7 +3,5 @@
 	$dbUser = '';
 	$dbPass = '';
 	$dbSchema = '';
-	$rchost = '';
-	$rcport = 3333;
 	$recaptcha_secret = "";
 ?>

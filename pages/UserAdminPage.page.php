@@ -36,8 +36,6 @@ class UserAdminPage extends Page
                 mysqli_query($mysql, 'UPDATE `users` SET ' . $set . ' WHERE `userid` = \'' . mysqli_real_escape_string($mysql, $_REQUEST['uid']) . '\'');
             }
 
-            rc('[[report:Special:UserAdmin]] ' . $_REQUEST['action'] . ' https://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . '?page=User+Admin * ' . $_SESSION['username'] . ' * ' . $_REQUEST['action'] . ' ' . $_REQUEST['user']);
-
             header('Location: ?page=User+Admin');
             die();
         }

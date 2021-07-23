@@ -43,8 +43,6 @@ function createReport($id, $user)
     $query .= ')';
 
     mysqli_query($mysql, $query);
-
-    rc('[[report:' . $id . ']] new https://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . '?page=View&id=' . $id . ' * ' . $user . ' * New Report');
 }
 
 function createComment($id, $user, $comment, $forceUser = false)
@@ -69,8 +67,6 @@ function createComment($id, $user, $comment, $forceUser = false)
     $query .= ')';
 
     mysqli_query($mysql, $query);
-
-    rc('[[report:' . $id . ']] comment https://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . '?page=View&id=' . $id . ' * ' . $user . ' * ' . $comment);
 }
 
 function updateStatusIfIncorrect($id, $statusId, $username)
@@ -178,21 +174,4 @@ function isSAdmin()
         return true;
     }
     return false;
-}
-
-function rc($line)
-{
-    global $rcport;
-    global $mysql;
-    $r = mysqli_fetch_assoc(mysqli_query($mysql, 'SELECT `node` from `cluster_node` where type="relay"'));
-    if (!$r) {
-        return;
-    }
-    $rc = fsockopen('udp://' . $r['node'], $rcport);
-    $line = str_replace(array("\r", "\n"), array('', '/'), $line);
-    if (strlen($line) > 400) {
-        $line = substr($line, 0, 394) . ' [...]';
-    }
-    fwrite($rc, $line);
-    fclose($rc);
 }
