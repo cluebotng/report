@@ -17,15 +17,6 @@ class OptionsPage extends Page
             $query = "UPDATE `users` SET `next_on_review` = '" . mysqli_real_escape_string($mysql, $next_on_review) . "'";
             $_SESSION['next_on_review'] = ($next_on_review) ? true : false;
 
-            if (trim($_POST['email']) != "") {
-                $query .= ", `email` = '" . mysqli_real_escape_string($mysql, $_POST['email']) . "'";
-                $_SESSION['email'] = mysqli_real_escape_string($mysql, $_POST['email']);
-            }
-
-            if (trim($_POST['password']) != "") {
-                $query .= ", `password` = PASSWORD('" . mysqli_real_escape_string($mysql, $_POST['password']) . "')";
-            }
-
             $query .= " WHERE `userid` = '" . mysqli_real_escape_string($mysql, $_SESSION['userid']) . "'";
             mysqli_query($mysql, $query);
 
@@ -45,15 +36,11 @@ class OptionsPage extends Page
             echo '<p>Saved!</p>';
         }
         echo '<form action="" method="post">';
-        echo '<h3>Change password</h3>';
-        echo '<p>(Leave blank to ignore change)</p>';
-        echo '<p>Password: <input type="text" id="password" name="password" value="" /></p>';
 
         echo '<h3>General options</h3>';
         echo '<p>Redirect on review: <input type="checkbox" id="next_on_review" name="next_on_review" value="Yes"';
         echo ($_SESSION['next_on_review']) ? ' checked=checked' : '';
         echo ' /></p>';
-        echo '<p>Email: <input type="text" id="email" name="email" value="' . $_SESSION['email'] . '" /></p>';
 
         echo '<p><input id="submit" name="submit" type="submit" value="Save" /></p>';
         echo '</form>';

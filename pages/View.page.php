@@ -7,8 +7,6 @@ class ViewPage extends Page
     private $row;
     private $id;
     private $data;
-    private $bad_captca;
-    private $bad_comment;
 
     public function __construct()
     {
@@ -22,25 +20,11 @@ class ViewPage extends Page
             die();
         }
 
-        if (isset($_POST['submit'])) {
+        if (isset($_POST['submit']) && isset($_SESSION['username'])) {
             if (trim($_POST['comment']) != '') {
-                $this->bad_captca = false;
-                if (!isset($_SESSION['username'])) {
-                    if (!recaptca_is_valid()) {
-                        $this->bad_captca = true;
-                    }
-                }
-
-                $this->bad_comment = false;
-                if (strpos($_POST['comment'], 'http://') !== false) {
-                    $this->bad_comment = true;
-                }
-
-                if ($this->bad_captca === false && $this->bad_comment === false) {
-                    createComment($this->id, $_POST['user'], $_POST['comment']);
-                    header('Location: ?page=View&id=' . $this->id);
-                    die();
-                }
+                createComment($this->id, $_SESSION['username'], $_POST['comment']);
+                header('Location: ?page=View&id=' . $this->id);
+                die();
             }
         }
 

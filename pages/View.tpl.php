@@ -124,47 +124,21 @@
 } ?>
 
 <?PHP
-$user = 'Anonymous';
 if (isset($_SESSION['username'])) {
-    $user = $_SESSION['username'];
-}
-?>
+    ?>
 <form method="post">
     <table class="reporttable">
-        <tr>
-            <th>Username:</th>
-            <td><input type="text" name="user" value="<?PHP if (isset($user)) {
-                    echo $user;
-                                                      } elseif ($user === "Anonymous") {
-                                                          echo $_POST['user'];
-                                                      } ?>"/></td>
-        </tr>
         <tr>
             <th>Comment:</th>
             <td><textarea name="comment" cols=80 rows=25><?php if (isset($_POST['comment'])) {
                         echo $_POST['comment'];
                                                          } ?></textarea></td>
         </tr>
-        <?php
-        if (isset($this->bad_captca) && $this->bad_captca === true) {
-            echo 'BAD CAPTCHA! TRY AGAIN!';
-        }
-        if (isset($this->bad_comment) && $this->bad_comment === true) {
-            echo 'Please do not attempt to put links in the comments. They will not work';
-        }
-        if ($user == 'Anonymous') {
-            ?>
-            <tr>
-                <th>Captcha:</th>
-                <td>
-                    <div class="g-recaptcha" data-sitekey="6LeLt64ZAAAAAFp9fyGDYMF49cdOMqQ79jUdUr1M"></div>
-                </td>
-            </tr>
-            <?php
-        }
-        ?>
         <tr>
             <td colspan=2><input type="submit" name="submit" value="Post comment"/></td>
         </tr>
     </table>
 </form>
+    <?PHP
+}
+?>
