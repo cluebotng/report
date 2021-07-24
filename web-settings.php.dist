@@ -3,5 +3,6 @@
 	$dbUser = '';
 	$dbPass = '';
 	$dbSchema = '';
-	$recaptcha_secret = "";
+	$oauthConsumerKey = '';
+	$oauthConsumerSecret = '';
 ?>

@@ -4,8 +4,67 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad8465c0efb1980c30772df1e45162ae",
+    "content-hash": "038d5d508686965dcb6e72dcf4ee8498",
     "packages": [
+        {
+            "name": "mediawiki/oauthclient",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wikimedia/mediawiki-oauthclient-php.git",
+                "reference": "ab5e5b417d4df8d39032716599642fd4da4979bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wikimedia/mediawiki-oauthclient-php/zipball/ab5e5b417d4df8d39032716599642fd4da4979bd",
+                "reference": "ab5e5b417d4df8d39032716599642fd4da4979bd",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.6.99",
+                "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "jakub-onderka/php-console-highlighter": "0.4",
+                "jakub-onderka/php-parallel-lint": "1.0.0",
+                "mediawiki/mediawiki-codesniffer": "23.0.0",
+                "mediawiki/minus-x": "0.3.1",
+                "phpunit/phpunit": "^5.7|^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MediaWiki\\OAuthClient\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Bryan Davis",
+                    "email": "bd808@wikimedia.org"
+                },
+                {
+                    "name": "Andy Smith",
+                    "homepage": "http://termie.pbworks.com/w/page/20571888/AndySmith"
+                },
+                {
+                    "name": "Chris Steipp",
+                    "email": "csteipp@wikimedia.org"
+                }
+            ],
+            "description": "PHP OAuth client for use with Wikipedia and other MediaWiki-based wikis running the OAuth extension",
+            "homepage": "https://www.mediawiki.org/wiki/oauthclient-php",
+            "support": {
+                "docs": "https://www.mediawiki.org/wiki/oauthclient-php",
+                "issues": "https://phabricator.wikimedia.org/tag/oauth/",
+                "source": "https://github.com/wikimedia/oauthclient-php/"
+            },
+            "time": "2019-02-02T17:34:20+00:00"
+        },
         {
             "name": "monolog/monolog",
             "version": "1.26.0",

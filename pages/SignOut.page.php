@@ -7,7 +7,7 @@ class SignOutPage extends Page
     public function __construct()
     {
         session_destroy();
-        header('Location: ?page=Sign+In');
+        header('Location: ?page=List');
         die();
     }
 
