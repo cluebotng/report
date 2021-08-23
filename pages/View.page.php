@@ -11,7 +11,7 @@ class ViewPage extends Page
     public function __construct()
     {
         global $mysql;
-        $this->id = $_REQUEST['id'];
+        $this->id = (int)$_REQUEST['id'];
         $result = mysqli_query($mysql, 'SELECT * FROM `vandalism` WHERE `id` = \'' . mysqli_real_escape_string($mysql, $this->id) . '\'');
         $this->row = mysqli_fetch_assoc($result);
         $this->data = getReport($this->id);
@@ -52,7 +52,7 @@ class ViewPage extends Page
 
     public function writeHeader()
     {
-        echo 'Viewing ' . $this->id;
+        echo 'Viewing ' . htmlspecialchars($this->id);
     }
 
     public function writeContent()
