@@ -18,7 +18,7 @@ if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
 
 $result = mysqli_query($mysql, $query);
 if (mysqli_num_rows($result) !== 1) {
-    die(json_encode( array(
+    die(json_encode(array(
         "error" => "argument_error",
         "error_message" => "Specified id was not found",
     )));
