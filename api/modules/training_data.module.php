@@ -73,12 +73,12 @@ class ApiModuleTrainingData extends ApiModule
                 $user_edit_count = (int)$user_edit_count_row['user_editcount'];
                 mysqli_free_result($user_edit_count_result);
                 return array(true, $user_edit_count);
-            } else {
-                return array(false, json_encode(array(
-                    "error" => "db_error",
-                    "error_message" => "Failed to calculate user_edit_count.",
-                )));
             }
+
+            return array(false, json_encode(array(
+                "error" => "db_error",
+                "error_message" => "Failed to calculate user_edit_count.",
+            )));
         }
 
         /* Registered user count */
@@ -92,12 +92,12 @@ class ApiModuleTrainingData extends ApiModule
             $user_edit_count = (int)$user_edit_count_row['user_editcount'];
             mysqli_free_result($user_edit_count_result);
             return array(true, $user_edit_count);
-        } else {
-            return array(false, json_encode(array(
-                "error" => "db_error",
-                "error_message" => "Failed to calculate user_edit_count.",
-            )));
         }
+
+        return array(false, json_encode(array(
+            "error" => "db_error",
+            "error_message" => "Failed to calculate user_edit_count.",
+        )));
     }
 
     private function getUserRegistrationTime($username, $default_registration_time)
@@ -130,7 +130,6 @@ class ApiModuleTrainingData extends ApiModule
                 (int)substr($registration_time, 0, 4)
             );
         }
-        mysqli_free_result($user_registration_result);
 
         // If the user got deleted or something then look for the first edit from the user
         $user_registration_result = mysqli_query(

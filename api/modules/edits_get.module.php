@@ -67,7 +67,7 @@ class ApiModuleEditsGet extends ApiModule
                 $data['beaten'] = true;
 
                 $beaten_row = mysqli_fetch_assoc($beaten_result);
-                $data['beaten_by'] = $brow['user'];
+                $data['beaten_by'] = $beaten_row['user'];
             }
 
             $report_result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['id']) . "'");
