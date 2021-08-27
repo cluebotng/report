@@ -1,12 +1,22 @@
 <?php
 
+namespace ReportApi;
+
 /*
  * Help module
  * - Provides human information about the API endpoints
  */
 
-header('Content-Type: text/plain');
-die("ClueBot NG Report API
+class ApiModuleHelp extends ApiModule
+{
+    public function header()
+    {
+        header('Content-Type: text/plain');
+    }
+
+    public function content()
+    {
+        return "ClueBot NG Report API
 
 Methods:
 |-Reports:
@@ -55,6 +65,14 @@ Methods:
 | |- Update all edits in review
 | | `- https://cluebotng.toolforge.org/api/?action=review.import
 |
+|-Internal Training Endpoints:
+| |- Get extended data for a specific edit
+| | `- https://cluebotng.toolforge.org/api/?action=training.data
+|
 `-Help:
  |- Get module documentation
-   `- https://cluebotng.toolforge.org/api/?action=help");
+   `- https://cluebotng.toolforge.org/api/?action=help";
+    }
+}
+
+ApiModule::register('help', 'ApiModuleHelp');

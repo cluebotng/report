@@ -1,5 +1,7 @@
 <?php
 
+namespace ReportApi;
+
 /*
  * Setup base env stuff
  */
@@ -12,66 +14,29 @@ date_default_timezone_set('America/New_York');
 require_once('../vendor/autoload.php');
 require_once('../web-settings.php');
 require_once('../includes/dbFunctions.php');
+require_once('includes/Module.php');
+
+foreach (glob('modules/*.module.php') as $module) {
+    require_once($module);
+}
 
 /*
  * Try and connect to mysql - we need this for pretty much everything
  */
-$mysql = @mysqli_connect($dbHost, $dbUser, $dbPass);
+$mysql = @mysqli_connect($cb_mysql_host, $cb_mysql_user, $cb_mysql_pass, $cb_mysql_schema, $cb_mysql_port);
 if (!$mysql) {
-    header('Content-Type: text/json');
+    header('Content-Type: application/json');
     die(json_encode(array(
         'error' => 'db_error',
         'error_message' => 'Could not connect to database server',
     ), JSON_PRETTY_PRINT));
 }
 
-/*
- * Try and select the db
- */
-if (!@mysqli_select_db($mysql, $dbSchema)) {
-    header('Content-Type: text/json');
-    die(json_encode(array(
-        'error' => 'db_error',
-        'error_message' => 'Could not access database scheme',
-    ), JSON_PRETTY_PRINT));
+$module = ApiModule::find($_REQUEST['action']);
+if ($module) {
+    $module->header();
+    echo($module->content());
+    $module->footer();
 }
 
-/*
- * Set the action to help - this is the default
- */
-$action = 'help';
-
-/*
- * If an action was requested then overwrite the default $action var
- */
-if (isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
-    $action = (string)strtolower($_REQUEST['action']);
-}
-
-/*
- * Convert dots to _ and lower the action string
- */
-$action = strtolower(str_replace('.', '_', $action));
-
-/*
- * Build the full path to the action
- */
-$action_module = realpath('modules/' . $action . '.module.php');
-
-/*
- * Build the base dirs to compare later
- */
-$base_dir = realpath('modules/');
-$action_dir = dirname(realpath($action_module));
-
-/*
- * Check the the action_module is valid (missing files return false from realpath)
- */
-if ($action_module === false || !is_file($action_module) || $action_dir !== $base_dir) {
-    die(json_encode(array(
-        'error' => 'unknown_action',
-        'error_message' => 'The requested action is unknown',
-    )));
-} else {
-    require_once($action_module);
-}
+@mysqli_close($mysql);
