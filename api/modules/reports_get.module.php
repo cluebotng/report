@@ -4,61 +4,43 @@
  * Reports get
  * - Returns a specific report in the database
  */
-
-$data = array();
-$statuses = array(
-    'Reported',
-    'Invalid',
-    'Sending to Review Interface',
-    'Bug',
-    'Resolved',
-    'Queued to be reviewed',
-    'Partially reviewed',
-    'Reviewed - Included in dataset as Constructive',
-    'Reviewed - Included in dataset as Vandalism',
-    'Reviewed - Not included in dataset'
-);
+header('Content-Type: text/json');
 
 $query = "SELECT * FROM `reports`";
-if (isset($_REQUEST['rid']) && !empty($_REQUEST['rid'])) {
-    $query .= " WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $_REQUEST['rid']) . "'";
+if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
+    $query .= " WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $_REQUEST['id']) . "'";
 } else {
-    $data = array(
+    die(json_encode(array(
         "error" => "argument_error",
-        "error_message" => "Specified rid was in an invalid format",
-    );
-    die(output_encoding($data));
+        "error_message" => "Specified id was in an invalid format",
+    )));
 }
 
 $result = mysqli_query($mysql, $query);
-if (mysqli_num_rows($result) === 1) {
-    $row = mysqli_fetch_assoc($result);
-    $data = array(
-        "revertid" => $row['revertid'],
-        "timestamp" => strtotime($row['timestamp']),
-        "reporter" => $row['reporter'],
-        "status" => $row['status'],
-        "friendly_status" => $statuses[$row['status']],
-        "comments" => array(),
-    );
-
-    $cresult = mysqli_query($mysql, "SELECT * FROM `comments` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['revertid']) . "'");
-    if (mysqli_num_rows($cresult) > 0) {
-        while ($crow = mysqli_fetch_assoc($cresult)) {
-            $data['comments']['commmentid-' . $crow['commentid']] = array(
-                "commentid" => $crow['commentid'],
-                "timestamp" => strtotime($crow['timestamp']),
-                "user" => $crow['user'],
-                "comment" => $crow['comment'],
-            );
-        }
-    }
-
-    die(output_encoding($data));
-} else {
-    $data = array(
+if (mysqli_num_rows($result) !== 1) {
+    die(json_encode( array(
         "error" => "argument_error",
-        "error_message" => "Specified rid was not found",
-    );
-    die(output_encoding($data));
+        "error_message" => "Specified id was not found",
+    )));
 }
+
+$report_row = mysqli_fetch_assoc($result);
+$data = array(
+    "revertid" => (int)$report_row['revertid'],
+    "timestamp" => strtotime($report_row['timestamp']),
+    "reporter" => $report_row['reporter'],
+    "status" => $statuses[$report_row['status']],
+    "status_id" => (int)$report_row['status'],
+    "comments" => array(),
+);
+
+$comment_result = mysqli_query($mysql, "SELECT * FROM `comments` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['revertid']) . "'");
+while ($comment_row = mysqli_fetch_assoc($comment_result)) {
+    array_push($data['comments'], array(
+        "timestamp" => strtotime($comment_row['timestamp']),
+        "user" => $comment_row['user'],
+        "comment" => $comment_row['comment'],
+    ));
+}
+
+die(json_encode($data, JSON_PRETTY_PRINT));

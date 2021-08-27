@@ -2,23 +2,16 @@
 
 /*
  * Help module
- * - Provides help about the modules we have
+ * - Provides human information about the API endpoints
  */
 
-$help_text = ("
-ClueBot NG API
-
-Options:
-format - Output format, valid values are as follows:
-- xml
-- json
-- php (serialize)
-- debug (print_r)
+header('Content-Type: text/plain');
+die("ClueBot NG Report API
 
 Methods:
 |-Reports:
 | |- List all reports
-| | `- https://tools.wbflabs.org/cluebot/api/?action=reports.list
+| | `- https://cluebotng.toolforge.org/api/?action=reports.list
 | |  `- Accepts the following arguments:
 | |     status - (optional) Report status, valid values are as follows:
 | |       1 - Reported
@@ -33,35 +26,15 @@ Methods:
 | |       10 - Reviewed (Not included in dataset)
 | |
 | |- Get specific report
-|   `- https://tools.wbflabs.org/cluebot/api/?action=reports.get
+|   `- https://cluebotng.toolforge.org/api/?action=reports.get
 |    `- Accepts the following arguments:
-|       rid - Report ID, valid values are obtained from the reports.list method
-|
-|-Beaten: - These are not implimented yet
-| |- List all beaten reverts
-|   `- https://tools.wbflabs.org/cluebot/api/?action=beaten.list
-|    `- Accepts the following arguments:
-|       article - (Optional) article the edit was on
-|       user - (Optional) user the edit was by
-|
-|-Users:
-| |- List all users
-| |`- https://tools.wbflabs.org/cluebot/api/?action=users.list
-| | `- Accepts the following arguments:
-| |    superadmin - (Optional) filter by superadmin status (1 for yes, 0 for no)
-| |    admin - (Optional) filter by admin status (1 for yes, 0 for no)
-| |
-| |- Get specific user - Certain information like hashed passwords will not be returned
-|  `- https://tools.wbflabs.org/cluebot/api/?action=users.get
-|   `- Accepts the following arguments:
-|      uid - User ID
-|      username - Username
+|       id - Revert ID, valid values are obtained from the reports.list method
 |
 |-Edits:
 | |- List all edits
-| | `- https://tools.wbflabs.org/cluebot/api/?action=edits.list
+| | `- https://cluebotng.toolforge.org/api/?action=edits.list
 | |  `- Accepts the following arguments:
-| |     eid - (Optional) Get edits after this id
+| |     after_edit_id - (Optional) Get edits after this id
 | |     user - (Optional) User the edit was by
 | |     article - (Optional) Article that the edit was on
 | |     heuristic - (Optional) Only return edits matching this heuristic
@@ -69,27 +42,19 @@ Methods:
 | |     reverted - (Optional) Edit reverted (1 for yes, 0 for no)
 | |
 | |- Get specific edit
-|   `- https://tools.wbflabs.org/cluebot/api/?action=edits.get
+|   `- https://cluebotng.toolforge.org/api/?action=edits.get
 |    `- Accepts the following arguments:
-|       eid - CBNG edit ID (see talk page message comments)
-|       diff - Diff URL
+|       edit_id - CBNG edit ID
 |       old_id - Old wikipedia revision ID
 |       new_id - New wikipedia revision ID
 |
-|-Live: - NOTE THESE DO NOT CHECK PRE/POST PROCESSING STUFF JUST THE CORE OUTPUT
-| |- Check a wikipedia id against the core
-|   `- https://tools.wbflabs.org/cluebot/api/?action=live.edit
-|    `- Accepts the following arguments:
-|       article - Article the edit is in
-|       diff - Diff ID of the edit
+|-Internal Review Endpoints:
+| |- List all edits to be imported for review
+| | `- https://cluebotng.toolforge.org/api/?action=review.export
+| |
+| |- Update all edits in review
+| | `- https://cluebotng.toolforge.org/api/?action=review.import
 |
 `-Help:
  |- Get module documentation
-   `- https://tools.wbflabs.org/cluebot/api/?action=help
-");
-
-$data = array(
-    "Help" => $help_text,
-);
-
-die(output_encoding($data));
+   `- https://cluebotng.toolforge.org/api/?action=help");
