@@ -1,137 +1,90 @@
 <?php
 
+namespace ReportApi;
+
 /*
  * Edits get
  * - Returns a specific edit in the database
  */
+class ApiModuleEditsGet extends ApiModule
+{
+    public function content()
+    {
+        global $statuses, $mysql;
 
-$data = array();
-$statuses = array(
-    'Reported',
-    'Invalid',
-    'Sending to Review Interface',
-    'Bug',
-    'Resolved',
-    'Queued to be reviewed',
-    'Partially reviewed',
-    'Reviewed - Included in dataset as Constructive',
-    'Reviewed - Included in dataset as Vandalism',
-    'Reviewed - Not included in dataset'
-);
-
-$query = "SELECT * FROM `vandalism`";
-
-if (isset($_REQUEST['eid']) && !empty($_REQUEST['eid'])) {
-    $query .= " WHERE `id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['eid']) . "'";
-} elseif (isset($_REQUEST['diff']) && !empty($_REQUEST['diff'])) {
-    $query .= " WHERE `diff` = '" . mysqli_real_escape_string($mysql, $_REQUEST['diff']) . "'";
-} elseif (isset($_REQUEST['old_id']) && !empty($_REQUEST['old_id'])) {
-    $query .= " WHERE `old_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['old_id']) . "'";
-} elseif (isset($_REQUEST['new_id']) && !empty($_REQUEST['new_id'])) {
-    $query .= " WHERE `new_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['new_id']) . "'";
-} else {
-    $data = array(
-        "error" => "argument_error",
-        "error_message" => "You must specify eid, diff, old_id or new_id for this method.",
-    );
-    die(output_encoding($data));
-}
-
-$result = mysqli_query($mysql, $query);
-if (mysqli_num_rows($result) === 1) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $data['edit-' . $row['id']] = array(
-            "id" => $row['id'],
-            "timestamp" => $row['timestamp'],
-            "user" => $row['user'],
-            "article" => $row['article'],
-            "heuristic" => $row['heuristic'],
-            "regex" => $row['regex'],
-            "reason" => $row['reason'],
-            "diff" => $row['diff'],
-            "old_id" => $row['old_id'],
-            "new_id" => $row['new_id'],
-            "reverted" => $row['reverted'],
-            "beaten" => 0,
-            "score" => null,
-            "fp_submitted" => 0,
-            "reviewed_submitted" => 0,
-        );
-
-        if (preg_match("/ANN scored at ([0-9.]+)/", $row['reason'], $matches) === 1) {
-            $data['edit-' . $row['id']]['score'] = (float)$matches[1];
+        $conditions = array();
+        if (isset($_REQUEST['edit_id']) && !empty($_REQUEST['edit_id'])) {
+            array_push($conditions, "`id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['edit_id']) . "'");
+        }
+        if (isset($_REQUEST['old_id']) && !empty($_REQUEST['old_id'])) {
+            array_push($conditions, "`old_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['old_id']) . "'");
+        }
+        if (isset($_REQUEST['new_id']) && !empty($_REQUEST['new_id'])) {
+            array_push($conditions, "`new_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['new_id']) . "'");
         }
 
-        $bresult = mysqli_query($mysql, "SELECT * FROM `beaten` WHERE `diff` = '" . mysqli_real_escape_string($mysql, $row['diff']) . "'");
-        if (mysqli_num_rows($bresult) > 0) {
-            $data['edit-' . $row['id']]['beaten'] = 1;
-
-            $brow = mysqli_fetch_assoc($bresult);
-            $data['edit-' . $row['id']]['beaten_by'] = $brow['user'];
+        if (count($conditions) === 0) {
+            return json_encode(array(
+                "error" => "argument_error",
+                "error_message" => "You must specify edit_id, old_id or new_id for this method.",
+            ));
         }
 
-        $fpresult = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['id']) . "'");
-        if (mysqli_num_rows($fpresult) > 0) {
-            $data['edit-' . $row['id']]['fp_submitted'] = 1;
+        $query = "SELECT * FROM `vandalism` WHERE " . implode(" AND ", $conditions);
+        $result = mysqli_query($mysql, $query);
+        if (mysqli_num_rows($result) !== 1) {
+            return json_encode(array(
+                "error" => "argument_error",
+                "error_message" => "The specified edit_id, diff, old_id or new_id was not found.",
+            ));
+        }
 
-            $fprow = mysqli_fetch_assoc($fpresult);
-            $data['edit-' . $row['id']]['fp_data'] = array(
-                "timestamp" => strtotime($fprow['timestamp']),
-                "reporterid" => $fprow['reporterid'],
-                "reporter" => $fprow['reporter'],
-                "status" => $fprow['status'],
-                "friendly_status" => $statuses[$fprow['status']],
-                "comments" => array(),
+        while ($row = mysqli_fetch_assoc($result)) {
+            $data = array(
+                "id" => (int)$row['id'],
+                "timestamp" => strtotime($row['timestamp']),
+                "user" => $row['user'],
+                "article" => $row['article'],
+                "heuristic" => (strlen($row['heuristic']) > 0 ? $row['heuristic'] : null),
+                "regex" => $row['regex'],
+                "reason" => $row['reason'],
+                "diff_url" => $row['diff'],
+                "old_id" => $row['old_id'],
+                "new_id" => $row['new_id'],
+                "reverted" => (bool)$row['reverted'],
+                "beaten" => false,
+                "beaten_by" => null,
+                "score" => null,
+                "report" => null,
             );
 
-            $fpcresult = mysqli_query($mysql, "SELECT * FROM `comments` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['id']) . "'");
-            if (mysqli_num_rows($fpcresult) > 0) {
-                while ($fpcrow = mysqli_fetch_assoc($fpcresult)) {
-                    $data['edit-' . $row['id']]['fp_data']['comments']['commentid-' . $fpcrow['commentid']] = array(
-                        "timestamp" => strtotime($fpcrow['timestamp']),
-                        "user" => $fpcrow['user'],
-                        "userid" => $fpcrow['userid'],
-                        "comment" => $fpcrow['comment'],
-                    );
-                }
+            if (preg_match("/ANN scored at ([0-9.]+)/", $row['reason'], $matches) === 1) {
+                $data['score'] = (float)$matches[1];
+            }
+
+            $beaten_result = mysqli_query($mysql, "SELECT * FROM `beaten` WHERE `diff` = '" . mysqli_real_escape_string($mysql, $row['diff']) . "'");
+            if (mysqli_num_rows($beaten_result) > 0) {
+                $data['beaten'] = true;
+
+                $beaten_row = mysqli_fetch_assoc($beaten_result);
+                $data['beaten_by'] = $beaten_row['user'];
+            }
+
+            $report_result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['id']) . "'");
+            if (mysqli_num_rows($report_result) > 0) {
+                $report_row = mysqli_fetch_assoc($report_result);
+                $data['report'] = array(
+                    "timestamp" => strtotime($report_row['timestamp']),
+                    "reporter" => $report_row['reporter'],
+                    "status" => $statuses[$report_row['status']],
+                    "status_id" => (int)$report_row['status'],
+                );
             }
         }
 
-        $review_data = file_get_contents('http://review.cluebot.cluenet.org/api?getEdit&geIds=' . urlencode($row['new_id']));
-        if (isset($review_data) && !empty($review_data)) {
-            $review_xml = simplexml_load_string($review_data);
-            if (!isset($review_xml->{"Error"})) {
-                $edit = $review_xml->{"GetEdit"}->{"Edit"}->{0};
-                if (isset($edit->{"ID"})) {
-                    $data['edit-' . $row['id']]['review_submitted'] = 1;
-
-                    $required = (string)$edit->Required;
-                    $constructive = (string)$edit->Constructive;
-                    $skipped = (string)$edit->Skipped;
-                    $vandalism = (string)$edit->Vandalism;
-                    $max = max($constructive, $skipped, $vandalism);
-                    $sum = $constructive + $skipped + $vandalism;
-
-                    $data['edit-' . $row['id']]['review_data'] = array(
-                        "scores" => array(
-                            "required" => $required,
-                            "constructive" => $constructive,
-                            "skipped" => $skipped,
-                            "vandalism" => $vandalism,
-                        ),
-                        "classification" => (string)$edit->Classification,
-                        "status" => (string)$edit->Status,
-                        "newclassification" => (string)$edit->NewClassification,
-                    );
-                }
-            }
-        }
+        mysqli_free_result($result);
+        return json_encode($data, JSON_PRETTY_PRINT);
     }
-    die(output_encoding($data));
-} else {
-    $data = array(
-        "error" => "argument_error",
-        "error_message" => "The specified eid, diff, old_id or new_id was not found.",
-    );
-    die(output_encoding($data));
 }
+
+ApiModule::register('edits.get', 'ApiModuleEditsGet');

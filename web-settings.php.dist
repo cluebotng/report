@@ -1,8 +1,16 @@
 <?PHP
-	$dbHost = '';
-	$dbUser = '';
-	$dbPass = '';
-	$dbSchema = '';
-	$oauthConsumerKey = '';
-	$oauthConsumerSecret = '';
-?>
+
+    static $cb_mysql_host = '';
+    static $cb_mysql_port = 3306;
+    static $cb_mysql_user = '';
+    static $cb_mysql_pass = '';
+    static $cb_mysql_schema = '';
+
+    static $oauth_consumer_key = '';
+    static $oauth_consumer_secret = '';
+
+    static $mw_mysql_host = '';
+    static $mw_mysql_port = 3306;
+    static $mw_mysql_user = '';
+    static $mw_mysql_pass = '';
+    static $mw_mysql_schema = '';

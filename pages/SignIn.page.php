@@ -28,9 +28,9 @@ class SignInPage extends Page
 
     public function __construct()
     {
-        global $oauthConsumerKey, $oauthConsumerSecret;
+        global $oauth_consumer_key, $oauth_consumer_secret;
         $conf = new ClientConfig('https://en.wikipedia.org/w/index.php?title=Special:OAuth');
-        $conf->setConsumer(new Consumer($oauthConsumerKey, $oauthConsumerSecret));
+        $conf->setConsumer(new Consumer($oauth_consumer_key, $oauth_consumer_secret));
         $client = new Client($conf);
 
         if (isset($_GET['oauth_verifier'])) {

@@ -13,12 +13,12 @@ foreach (glob('pages/*.page.php') as $page) {
     require_once $page;
 }
 
-$mysql = mysqli_connect($dbHost, $dbUser, $dbPass);
+$mysql = mysqli_connect($cb_mysql_host, $cb_mysql_user, $cb_mysql_pass);
 if (!$mysql) {
     die('Error.  Could not connect to database.');
 }
 
-if (!mysqli_select_db($mysql, $dbSchema)) {
+if (!mysqli_select_db($mysql, $cb_mysql_schema)) {
     die('Error.  Database has insufficient permissions.');
 }
 
