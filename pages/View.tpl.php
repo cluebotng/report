@@ -50,13 +50,21 @@
                 ?>
                 (
                 <a href="?page=View&id=<?PHP echo $this->row['id'];
-                ?>&status=0">Reported</a> &middot;
+                ?>&status=0">Reported<?PHP if (isset($_SESSION['keyboard_shortcuts']) && $_SESSION['keyboard_shortcuts'] === true) {
+    ?> (r)<?PHP
+                } ?></a> &middot;
                 <a href="?page=View&id=<?PHP echo $this->row['id'];
-                ?>&status=1">Invalid</a> &middot;
+                ?>&status=1">Invalid<?PHP if (isset($_SESSION['keyboard_shortcuts']) && $_SESSION['keyboard_shortcuts'] === true) {
+    ?> (i)<?PHP
+                } ?></a> &middot;
                 <a href="?page=View&id=<?PHP echo $this->row['id'];
-                ?>&status=2">Defer to Review Interface</a> &middot;
+                ?>&status=2">Defer to Review Interface<?PHP if (isset($_SESSION['keyboard_shortcuts']) && $_SESSION['keyboard_shortcuts'] === true) {
+    ?> (d)<?PHP
+                } ?></a> &middot;
                 <a href="?page=View&id=<?PHP echo $this->row['id'];
-                ?>&status=3">Bug</a> &middot;
+                ?>&status=3">Bug<?PHP if (isset($_SESSION['keyboard_shortcuts']) && $_SESSION['keyboard_shortcuts'] === true) {
+    ?> (b)<?PHP
+                } ?></a> &middot;
                 <a href="?page=View&id=<?PHP echo $this->row['id'];
                 ?>&status=4">Resolved</a>
                 )
@@ -142,3 +150,19 @@ if (isset($_SESSION['username'])) {
     <?PHP
 }
 ?>
+
+<?PHP if (isAdmin() && (isset($_SESSION['keyboard_shortcuts']) && $_SESSION['keyboard_shortcuts'] === true)) { ?>
+<script type="text/javascript">
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'r') {
+    window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=0';
+  } else if (event.key === 'i') {
+    window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=1';
+  } else if (event.key === 'd') {
+    window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=2';
+  } else if (event.key === 'b') {
+    window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=3';
+  }
+});
+</script>
+<?PHP } ?>
