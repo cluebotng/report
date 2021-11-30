@@ -14,9 +14,18 @@ class OptionsPage extends Page
                 $next_on_review = 0;
             }
 
-            $query = "UPDATE `users` SET `next_on_review` = '" . mysqli_real_escape_string($mysql, $next_on_review) . "'";
-            $_SESSION['next_on_review'] = ($next_on_review) ? true : false;
+            if (isset($_POST['keyboard_shortcuts']) && $_POST['keyboard_shortcuts'] === "Yes") {
+                $keyboard_shortcuts = 1;
+            } else {
+                $keyboard_shortcuts = 0;
+            }
 
+            $_SESSION['next_on_review'] = ($next_on_review) ? true : false;
+            $_SESSION['keyboard_shortcuts'] = ($keyboard_shortcuts) ? true : false;
+
+            $query = "UPDATE `users` SET";
+            $query .= " `next_on_review` = '" . mysqli_real_escape_string($mysql, $next_on_review) . "',";
+            $query .= " `keyboard_shortcuts` = '" . mysqli_real_escape_string($mysql, $keyboard_shortcuts) . "'";
             $query .= " WHERE `userid` = '" . mysqli_real_escape_string($mysql, $_SESSION['userid']) . "'";
             mysqli_query($mysql, $query);
 
@@ -40,6 +49,10 @@ class OptionsPage extends Page
         echo '<h3>General options</h3>';
         echo '<p>Redirect on review: <input type="checkbox" id="next_on_review" name="next_on_review" value="Yes"';
         echo ($_SESSION['next_on_review']) ? ' checked=checked' : '';
+        echo ' /></p>';
+
+        echo '<p>Review keyboard shortcuts: <input type="checkbox" id="keyboard_shortcuts" name="keyboard_shortcuts" value="Yes"';
+        echo ($_SESSION['keyboard_shortcuts']) ? ' checked=checked' : '';
         echo ' /></p>';
 
         echo '<p><input id="submit" name="submit" type="submit" value="Save" /></p>';
