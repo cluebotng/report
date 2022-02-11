@@ -339,6 +339,37 @@ class ApiModuleTrainingData extends ApiModule
         );
 
         /*
+         * Optionally include the revision text from Wikipedia
+         */
+        if (isset($_REQUEST['include_text'])) {
+            $mh = curl_multi_init();
+
+            $curl_worker_previous = curl_init();
+            curl_setopt($curl_worker_previous, CURLOPT_URL, 'https://en.wikipedia.org/w/index.php?action=raw&diff=' . (int)$previous_revision_row['rev_id']);
+            curl_setopt($curl_worker_previous, CURLOPT_RETURNTRANSFER, true);
+            curl_multi_add_handle($mh, $curl_worker_previous);
+
+            $curl_worker_current = curl_init();
+            curl_setopt($curl_worker_current, CURLOPT_URL, 'https://en.wikipedia.org/w/index.php?action=raw&diff=' . (int)$revision_row['rev_id']);
+            curl_setopt($curl_worker_current, CURLOPT_RETURNTRANSFER, true);
+            curl_multi_add_handle($mh, $curl_worker_current);
+
+            do {
+                $status = curl_multi_exec($mh, $active);
+                if ($active) {
+                    curl_multi_select($mh);
+                }
+            } while ($active && $status == CURLM_OK);
+
+            curl_multi_remove_handle($mh, $curl_worker_previous);
+            curl_multi_remove_handle($mh, $curl_worker_current);
+            curl_multi_close($mh);
+
+            $data['previous']['text'] = curl_multi_getcontent($curl_worker_previous);
+            $data['current']['text'] = curl_multi_getcontent($curl_worker_current);
+        }
+
+        /*
          * The following logic is similar to https://github.com/cluebotng/bot/blob/main/mysql_functions.php
          * However it differs in using an explict diff id & time spans
          */
