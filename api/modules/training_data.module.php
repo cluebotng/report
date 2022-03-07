@@ -220,13 +220,13 @@ class ApiModuleTrainingData extends ApiModule
             return array(false, $edit_count[1]);
         }
 
-        return array(true, array(
+        return array(
             'name' => $username,
             'registration_time' => $user_registration_time,
             'warning_count' => $user_warning_count,
             'distinct_pages_count' => $user_distinct_pages_count,
             'edit_count' => $edit_count[1],
-        ));
+        );
     }
 
     public function header()
