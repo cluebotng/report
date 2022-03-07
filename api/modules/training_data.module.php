@@ -75,7 +75,8 @@ class ApiModuleTrainingData extends ApiModule
                 return array(true, $user_edit_count);
             }
 
-            return array(false, json_encode(array(
+            header('HTTP/1.1 500 Internal Server Error');
+            die(json_encode(array(
                 "error" => "db_error",
                 "error_message" => "Failed to calculate user_edit_count.",
             )));
@@ -94,7 +95,8 @@ class ApiModuleTrainingData extends ApiModule
             return array(true, $user_edit_count);
         }
 
-        return array(false, json_encode(array(
+        header('HTTP/1.1 500 Internal Server Error');
+        die(json_encode(array(
             "error" => "db_error",
             "error_message" => "Failed to calculate user_edit_count.",
         )));
@@ -177,7 +179,8 @@ class ApiModuleTrainingData extends ApiModule
             $user_warning_count = (int)$user_warning_count_row['count'];
             mysqli_free_result($user_warning_count_result);
         } else {
-            return array(false, json_encode(array(
+            header('HTTP/1.1 500 Internal Server Error');
+            die(json_encode(array(
                 "error" => "db_error",
                 "error_message" => "Failed to calculate user_warns.",
             )));
@@ -196,7 +199,8 @@ class ApiModuleTrainingData extends ApiModule
             $user_distinct_pages_count = (int)$user_distinct_count_row['count'];
             mysqli_free_result($user_distinct_count_result);
         } else {
-            return array(false, json_encode(array(
+            header('HTTP/1.1 500 Internal Server Error');
+            die(json_encode(array(
                 "error" => "db_error",
                 "error_message" => "Failed to calculate user_distinct_pages.",
             )));
@@ -204,7 +208,8 @@ class ApiModuleTrainingData extends ApiModule
 
         $user_registration_time = $this->getUserRegistrationTime($username, $base_revision_time);
         if (!$user_registration_time) {
-            return array(false, json_encode(array(
+            header('HTTP/1.1 500 Internal Server Error');
+            die(json_encode(array(
                 "error" => "db_error",
                 "error_message" => "Failed to calculate user_reg_time.",
             )));
@@ -234,6 +239,7 @@ class ApiModuleTrainingData extends ApiModule
          */
         $this->mw_mysql = @mysqli_connect($mw_mysql_host, $mw_mysql_user, $mw_mysql_pass, $mw_mysql_schema, $mw_mysql_port);
         if (!$this->mw_mysql) {
+            header('HTTP/1.1 500 Internal Server Error');
             die(json_encode(array(
                 'error' => 'db_error',
                 'error_message' => 'Could not connect to the wiki database server',
@@ -252,10 +258,11 @@ class ApiModuleTrainingData extends ApiModule
          * Ensure we have a target id
          */
         if (!isset($_REQUEST['rev_id']) || empty($_REQUEST['rev_id']) || (int)$_REQUEST['rev_id'] === 0) {
-            return json_encode(array(
+            header('HTTP/1.1 400 Bad Request');
+            die(json_encode(array(
                 "error" => "argument_error",
                 "error_message" => "Specified rev_id was in an invalid format",
-            ));
+            )));
         }
 
         /*
@@ -274,10 +281,11 @@ class ApiModuleTrainingData extends ApiModule
         if ($revision_row = mysqli_fetch_assoc($revision_result)) {
             mysqli_free_result($revision_result);
         } else {
-            return json_encode(array(
+            header('HTTP/1.1 404 Not Found');
+            die(json_encode(array(
                 "error" => "argument_error",
                 "error_message" => "The specified rev_id was not found.",
-            ));
+            )));
         }
 
         $previous_revision_result = mysqli_query(
@@ -293,18 +301,14 @@ class ApiModuleTrainingData extends ApiModule
         if ($previous_revision_row = mysqli_fetch_assoc($previous_revision_result)) {
             mysqli_free_result($previous_revision_result);
         } else {
-            return json_encode(array(
+            header('HTTP/1.1 400 Bad Request');
+            die(json_encode(array(
                 "error" => "argument_error",
                 "error_message" => "Failed to find previous revision.",
-            ));
+            )));
         }
 
-        $revision_user_data = $this->getUserData($revision_row['actor_name'], $revision_row['rev_timestamp']);
-        if (!$revision_user_data[0]) {
-            return $revision_user_data[1];
-        }
-        $revision_user = $revision_user_data[1];
-
+        $revision_user = $this->getUserData($revision_row['actor_name'], $revision_row['rev_timestamp']);
         $data = array(
             'current' => array(
                 'id' => (int)$revision_row['rev_id'],
@@ -387,10 +391,11 @@ class ApiModuleTrainingData extends ApiModule
         if ($page_row = mysqli_fetch_assoc($page_result)) {
             mysqli_free_result($page_result);
         } else {
-            return json_encode(array(
+            header('HTTP/1.1 404 Not Found');
+            die(json_encode(array(
                 "error" => "argument_error",
                 "error_message" => "The specified rev_id was not found.",
-            ));
+            )));
         }
 
         $data['page'] = array(
@@ -429,10 +434,11 @@ class ApiModuleTrainingData extends ApiModule
             $data['page']['recent_edit_count'] = (int)$recent_edit_row['count'];
             mysqli_free_result($recent_edit_results);
         } else {
-            return json_encode(array(
+            header('HTTP/1.1 500 Internal Server Error');
+            die(json_encode(array(
                 "error" => "db_error",
                 "error_message" => "Failed to calculate num_recent_edits.",
-            ));
+            )));
         }
 
         /* Recent page reverts */
@@ -455,10 +461,11 @@ class ApiModuleTrainingData extends ApiModule
             $data['page']['recent_reversion_count'] = (int)$recent_reversions_row['count'];
             mysqli_free_result($recent_reversions_results);
         } else {
-            return json_encode(array(
+            header('HTTP/1.1 500 Internal Server Error');
+            die(json_encode(array(
                 "error" => "db_error",
                 "error_message" => "Failed to calculate num_recent_reversions.",
-            ));
+            )));
         }
 
         return json_encode($data, JSON_PRETTY_PRINT);
