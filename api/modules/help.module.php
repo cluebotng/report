@@ -65,10 +65,6 @@ Methods:
 | |- Update all edits in review
 | | `- https://cluebotng.toolforge.org/api/?action=review.import
 |
-|-Internal Training Endpoints:
-| |- Get extended data for a specific edit
-| | `- https://cluebotng.toolforge.org/api/?action=training.data
-|
 `-Help:
  |- Get module documentation
    `- https://cluebotng.toolforge.org/api/?action=help";
