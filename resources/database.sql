@@ -22,12 +22,14 @@ CREATE TABLE `comments` (
 ) ENGINE=InnoDB;
 
 CREATE TABLE `users` (
-	`userid` INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-	`username` VARCHAR(128) NOT NULL,
-	`password` VARCHAR(128) NOT NULL,
-	`email` VARCHAR(128) NOT NULL,
-	`admin` TINYINT(1) NOT NULL,
-	`superadmin` TINYINT(1) NOT NULL,
-	
-	UNIQUE KEY (`username`)
-) ENGINE=InnoDB;
+	`userid` int(11) NOT NULL AUTO_INCREMENT,
+	`username` varchar(128) NOT NULL,
+	`password` varchar(128) NOT NULL DEFAULT '',
+	`email` varchar(128) NOT NULL DEFAULT '',
+	`admin` tinyint(1) NOT NULL DEFAULT 0,
+	`superadmin` tinyint(1) NOT NULL DEFAULT 0,
+	`next_on_review` tinyint(1) DEFAULT 0,
+	`keyboard_shortcuts` tinyint(1) DEFAULT 0,
+	PRIMARY KEY (`userid`),
+	UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci
