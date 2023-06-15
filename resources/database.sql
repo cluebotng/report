@@ -1,25 +1,26 @@
 CREATE TABLE `reports` (
-	`revertid` INT PRIMARY KEY NOT NULL,
-	`timestamp` TIMESTAMP NOT NULL,
-	`reporterid` INT NOT NULL,
-	`reporter` VARCHAR(128) NOT NULL,
-	`status` INT NOT NULL,
-	
-	INDEX USING BTREE (`reporterid`),
-	INDEX USING BTREE (`status`)
-) ENGINE=InnoDB;
+	`revertid` int(11) NOT NULL,
+	`timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+	`reporterid` int(11) NOT NULL,
+	`reporter` varchar(128) NOT NULL,
+	`status` int(11) NOT NULL,
+	PRIMARY KEY (`revertid`),
+	KEY `reporterid` (`reporterid`),
+	KEY `status` (`status`),
+	CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`revertid`) REFERENCES `vandalism` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `comments` (
-	`commentid` INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-	`revertid` INT NOT NULL,
-	`timestamp` TIMESTAMP NOT NULL,
-	`userid` INT NOT NULL,
-	`user` VARCHAR(128) NOT NULL,
-	`comment` TEXT NOT NULL,
-	
-	INDEX USING BTREE (`revertid`),
-	INDEX USING BTREE (`userid`)
-) ENGINE=InnoDB;
+	`commentid` int(11) NOT NULL AUTO_INCREMENT,
+	`revertid` int(11) NOT NULL,
+	`timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+	`userid` int(11) NOT NULL,
+	`user` varchar(128) NOT NULL,
+	`comment` text NOT NULL,
+	PRIMARY KEY (`commentid`),
+	KEY `revertid` (`revertid`),
+	KEY `userid` (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `users` (
 	`userid` int(11) NOT NULL AUTO_INCREMENT,
@@ -28,8 +29,8 @@ CREATE TABLE `users` (
 	`email` varchar(128) NOT NULL DEFAULT '',
 	`admin` tinyint(1) NOT NULL DEFAULT 0,
 	`superadmin` tinyint(1) NOT NULL DEFAULT 0,
-	`next_on_review` tinyint(1) DEFAULT 0,
-	`keyboard_shortcuts` tinyint(1) DEFAULT 0,
+	`next_on_review` tinyint(1) DEFAULT 1,
+	`keyboard_shortcuts` tinyint(1) DEFAULT 1,
 	PRIMARY KEY (`userid`),
 	UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci
