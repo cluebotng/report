@@ -12,7 +12,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      - name: Install the testing dependancies
+      - name: Install the testing dependencies
         run: |
           ./composer.phar self-update
           ./composer.phar install
