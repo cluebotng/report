@@ -35,14 +35,15 @@ function createReport($id, $user)
         $userid = -1;
     }
 
-    $query = 'INSERT INTO `reports` (`revertid`,`reporterid`,`reporter`,`status`) VALUES (';
-    $query .= '\'' . mysqli_real_escape_string($mysql, $id) . '\',';
-    $query .= '\'' . mysqli_real_escape_string($mysql, $userid) . '\',';
-    $query .= '\'' . mysqli_real_escape_string($mysql, $user) . '\',';
-    $query .= '0';
-    $query .= ')';
+    $query = "INSERT INTO `reports` (`revertid`, `reporterid`, `reporter`, `status`) VALUES (?, ?, ?, 0)";
 
-    mysqli_query($mysql, $query);
+    if ($stmt = mysqli_prepare($mysql, $query)) {
+        mysqli_stmt_bind_param($stmt, "sis", $id, $userid, $user);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    } else {
+        return false;
+    }
 }
 
 function createComment($id, $user, $comment, $forceUser = false)
@@ -59,97 +60,129 @@ function createComment($id, $user, $comment, $forceUser = false)
         $userid = -2;
     }
 
-    $query = 'INSERT INTO `comments` (`revertid`,`userid`,`user`,`comment`) VALUES (';
-    $query .= '\'' . mysqli_real_escape_string($mysql, $id) . '\',';
-    $query .= '\'' . mysqli_real_escape_string($mysql, $userid) . '\',';
-    $query .= '\'' . mysqli_real_escape_string($mysql, $user) . '\',';
-    $query .= '\'' . mysqli_real_escape_string($mysql, $comment) . '\'';
-    $query .= ')';
-
-    mysqli_query($mysql, $query);
+    $query = "INSERT INTO `comments` (`revertid`, `userid`, `user`, `comment`) VALUES (?, ?, ?, ?)";
+    if ($stmt = mysqli_prepare($mysql, $query)) {
+        mysqli_stmt_bind_param($stmt, "siss", $id, $userid, $user, $comment);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    } else {
+        return false;
+    }
 }
 
 function updateStatusIfIncorrect($id, $statusId, $username)
 {
     global $mysql;
-    $row = mysqli_fetch_assoc(mysqli_query($mysql, 'SELECT `status` FROM `reports` WHERE `revertid` = \'' . mysqli_real_escape_string($mysql, $id) . '\''));
-    if ($row['status'] != $statusId) {
-        updateStatus($id, $statusId, $username);
+    $query = "SELECT `status` FROM `reports` WHERE `revertid` = ?";
+
+    // Prepare the statement
+    if ($stmt = mysqli_prepare($mysql, $query)) {
+        mysqli_stmt_bind_param($stmt, "s", $id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+        if ($row['status'] != $statusId) {
+            updateStatus($id, $statusId, $username);
+        }
+    } else {
+        return false;
     }
 }
+
 
 function updateStatus($id, $statusId, $username)
 {
     global $mysql;
-    mysqli_query($mysql, 'UPDATE `reports` SET `status` = \'' . mysqli_real_escape_string($mysql, $statusId) . '\' WHERE `revertid` = \'' . mysqli_real_escape_string($mysql, $id) . '\'');
-    createComment($id, 'System', $username . ' has marked this report as "' . statusIdToName($statusId) . '".', true);
+    $query = "UPDATE `reports` SET `status` = ? WHERE `revertid` = ?";
+    if ($stmt = mysqli_prepare($mysql, $query)) {
+        mysqli_stmt_bind_param($stmt, "ss", $statusId, $id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    } else {
+        return false;
+    }
+
+    createComment(
+        $id,
+        'System',
+        $username . ' has marked this report as "' . statusIdToName($statusId) . '".',
+        true
+    );
 }
+
 
 function getReport($id)
 {
     global $mysql;
-    $id = '\'' . mysqli_real_escape_string($mysql, $id) . '\'';
-    $result = mysqli_query(
-        $mysql,
-        'SELECT `revertid`, UNIX_TIMESTAMP(`timestamp`) AS `time`, `reporterid`, `reporter`, `status`
-			FROM `reports`
-			WHERE `revertid` = ' . $id
-    );
 
-    if (mysqli_num_rows($result) == 0) {
+    $query = "SELECT `revertid`, UNIX_TIMESTAMP(`timestamp`) AS `time`, `reporterid`, `reporter`, `status`
+              FROM `reports`
+              WHERE `revertid` = ?";
+    if ($stmt = mysqli_prepare($mysql, $query)) {
+        mysqli_stmt_bind_param($stmt, "s", $id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        if (mysqli_num_rows($result) == 0) {
+            mysqli_stmt_close($stmt);
+            return null;
+        }
+        $reportData = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+    } else {
         return null;
     }
-
-    $reportData = mysqli_fetch_assoc($result);
 
     $data = array(
         'id' => $reportData['revertid'],
         'timestamp' => $reportData['time'],
-        'anonymous' => $reportData['reporterid'] == -1 ? true : false,
+        'anonymous' => ($reportData['reporterid'] == -1),
         'username' => $reportData['reporter'],
         'status' => statusIdToName($reportData['status']),
         'comments' => array()
     );
 
-    $result = mysqli_query(
-        $mysql,
-        'SELECT `commentid`, UNIX_TIMESTAMP( `timestamp` ) AS `time`, `userid`, `user`, `comment`
-			FROM `comments`
-			WHERE `revertid` = ' . $id
-    );
-
-    while ($row = mysqli_fetch_assoc($result)) {
-        $data['comments'][] = array(
-            'id' => $row['commentid'],
-            'timestamp' => $row['time'],
-            'userid' => $row['userid'],
-            'anonymous' => $row['userid'] == -1 ? true : false,
-            'username' => $row['user'],
-            'comment' => $row['comment']
-        );
+    // Second: Get the comments for this report
+    $queryComments = "SELECT `commentid`, UNIX_TIMESTAMP(`timestamp`) AS `time`, `userid`, `user`, `comment`
+                      FROM `comments`
+                      WHERE `revertid` = ?";
+    if ($stmtComments = mysqli_prepare($mysql, $queryComments)) {
+        mysqli_stmt_bind_param($stmtComments, "s", $id);
+        mysqli_stmt_execute($stmtComments);
+        $resultComments = mysqli_stmt_get_result($stmtComments);
+        while ($row = mysqli_fetch_assoc($resultComments)) {
+            $data['comments'][] = array(
+                'id' => $row['commentid'],
+                'timestamp' => $row['time'],
+                'userid' => $row['userid'],
+                'anonymous' => ($row['userid'] == -1),
+                'username' => $row['user'],
+                'comment' => $row['comment']
+            );
+        }
+        mysqli_stmt_close($stmtComments);
     }
 
-    foreach ($data['comments'] as &$comment) {
-        if ($comment['userid'] != -1) {
-            $row = mysqli_fetch_assoc(mysqli_query($mysql, 'SELECT `admin`, `superadmin` FROM `users` WHERE `userid` = ' . $comment['userid']));
-            if ($row and $row['admin'] == 1) {
-                $comment['admin'] = true;
+    $queryUser = "SELECT `admin`, `superadmin` FROM `users` WHERE `userid` = ?";
+    if ($stmtUser = mysqli_prepare($mysql, $queryUser)) {
+        foreach ($data['comments'] as &$comment) {
+            if ($comment['userid'] != -1) {
+                mysqli_stmt_bind_param($stmtUser, "i", $comment['userid']);
+                mysqli_stmt_execute($stmtUser);
+                $resultUser = mysqli_stmt_get_result($stmtUser);
+                $row = mysqli_fetch_assoc($resultUser);
+                $comment['admin'] = ($row && $row['admin'] == 1);
+                $comment['sadmin'] = ($row && $row['superadmin'] == 1);
             } else {
                 $comment['admin'] = false;
-            }
-            if ($row and $row['superadmin'] == 1) {
-                $comment['sadmin'] = true;
-            } else {
                 $comment['sadmin'] = false;
             }
-        } else {
-            $comment['admin'] = false;
-            $comment['sadmin'] = false;
         }
+        mysqli_stmt_close($stmtUser);
     }
-
     return $data;
 }
+
 
 function isAdmin()
 {

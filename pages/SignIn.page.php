@@ -12,18 +12,32 @@ class SignInPage extends Page
     private function lookupUser($username)
     {
         global $mysql;
-        $query = 'SELECT `userid`, `username`, `admin`, `superadmin`, `next_on_review`, `email` FROM `users` WHERE `username` = ';
-        $query .= '\'' . mysqli_real_escape_string($mysql, $username) . '\'';
-        return mysqli_fetch_assoc(mysqli_query($mysql, $query));
+        $query = "SELECT `userid`, `username`, `admin`, `superadmin`, `next_on_review`, `email`, `hide_anon`
+              FROM `users`
+              WHERE `username` = ?";
+        if ($stmt = mysqli_prepare($mysql, $query)) {
+            mysqli_stmt_bind_param($stmt, "s", $username);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $user = mysqli_fetch_assoc($result);
+            mysqli_stmt_close($stmt);
+            return $user;
+        } else {
+            return false;
+        }
     }
 
     private function createUser($username)
     {
         global $mysql;
-        $query = 'INSERT INTO `users` (`username`,`admin`) VALUES (';
-        $query .= '\'' . mysqli_real_escape_string($mysql, $username) . '\',';
-        $query .= '0)';
-        mysqli_query($mysql, $query);
+        $query = "INSERT INTO `users` (`username`, `admin`) VALUES (?, 0)";
+        if ($stmt = mysqli_prepare($mysql, $query)) {
+            mysqli_stmt_bind_param($stmt, "s", $username);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+        } else {
+            return false;
+        }
     }
 
     public function __construct()
@@ -67,6 +81,7 @@ class SignInPage extends Page
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['admin'] = $user['admin'] ? true : false;
                 $_SESSION['sadmin'] = $user['superadmin'] ? true : false;
+                $_SESSION['hide_anon'] = $user['hide_anon'] ? true : false;
 
                 header('Location: ?page=List');
                 die();

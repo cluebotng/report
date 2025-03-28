@@ -31,6 +31,7 @@ CREATE TABLE `users` (
 	`superadmin` tinyint(1) NOT NULL DEFAULT 0,
 	`next_on_review` tinyint(1) DEFAULT 1,
 	`keyboard_shortcuts` tinyint(1) DEFAULT 1,
+    `hide_anon` tinyint(1) DEFAULT 0,
 	PRIMARY KEY (`userid`),
 	UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci

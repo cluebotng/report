@@ -20,12 +20,20 @@ class OptionsPage extends Page
                 $keyboard_shortcuts = 0;
             }
 
+            if (isset($_POST['hide_anon']) && $_POST['hide_anon'] === "Yes") {
+                $hide_anon = 1;
+            } else {
+                $hide_anon = 0;
+            }
+
             $_SESSION['next_on_review'] = ($next_on_review) ? true : false;
             $_SESSION['keyboard_shortcuts'] = ($keyboard_shortcuts) ? true : false;
+            $_SESSION['hide_anon'] = ($hide_anon) ? true : false;
 
             $query = "UPDATE `users` SET";
             $query .= " `next_on_review` = '" . mysqli_real_escape_string($mysql, $next_on_review) . "',";
-            $query .= " `keyboard_shortcuts` = '" . mysqli_real_escape_string($mysql, $keyboard_shortcuts) . "'";
+            $query .= " `keyboard_shortcuts` = '" . mysqli_real_escape_string($mysql, $keyboard_shortcuts) . "',";
+            $query .= " `hide_anon` = '" . mysqli_real_escape_string($mysql, $hide_anon) . "'";
             $query .= " WHERE `userid` = '" . mysqli_real_escape_string($mysql, $_SESSION['userid']) . "'";
             mysqli_query($mysql, $query);
 
@@ -53,6 +61,10 @@ class OptionsPage extends Page
 
         echo '<p>Review keyboard shortcuts: <input type="checkbox" id="keyboard_shortcuts" name="keyboard_shortcuts" value="Yes"';
         echo ($_SESSION['keyboard_shortcuts']) ? ' checked=checked' : '';
+        echo ' /></p>';
+
+        echo '<p>Hide Anon: <input type="checkbox" id="hide_anon" name="hide_anon" value="No"';
+        echo ($_SESSION['hide_anon']) ? ' checked=checked' : '';
         echo ' /></p>';
 
         echo '<p><input id="submit" name="submit" type="submit" value="Save" /></p>';

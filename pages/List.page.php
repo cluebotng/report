@@ -11,6 +11,9 @@ class ListPage extends Page
         global $mysql;
         if (!isset($_REQUEST['showall'])) {
             $where = ' WHERE `status` IN (0,2,3,5,6)';
+            if ((isset($_SESSION['hide_anon'])) && ($_SESSION['hide_anon'])) {
+                $where .= ' AND `reporter` NOT LIKE "%Anonymous%"';
+            }
         } else {
             $where = '';
         }
