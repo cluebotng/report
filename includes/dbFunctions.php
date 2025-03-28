@@ -41,6 +41,7 @@ function createReport($id, $user)
         mysqli_stmt_bind_param($stmt, "sis", $id, $userid, $user);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
+        return true;
     } else {
         return false;
     }
@@ -65,6 +66,7 @@ function createComment($id, $user, $comment, $forceUser = false)
         mysqli_stmt_bind_param($stmt, "siss", $id, $userid, $user, $comment);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
+        return true;
     } else {
         return false;
     }
@@ -74,8 +76,6 @@ function updateStatusIfIncorrect($id, $statusId, $username)
 {
     global $mysql;
     $query = "SELECT `status` FROM `reports` WHERE `revertid` = ?";
-
-    // Prepare the statement
     if ($stmt = mysqli_prepare($mysql, $query)) {
         mysqli_stmt_bind_param($stmt, "s", $id);
         mysqli_stmt_execute($stmt);
@@ -84,6 +84,9 @@ function updateStatusIfIncorrect($id, $statusId, $username)
         mysqli_stmt_close($stmt);
         if ($row['status'] != $statusId) {
             updateStatus($id, $statusId, $username);
+            return true;
+        } else {
+            return false;
         }
     } else {
         return false;
@@ -109,6 +112,7 @@ function updateStatus($id, $statusId, $username)
         $username . ' has marked this report as "' . statusIdToName($statusId) . '".',
         true
     );
+    return true;
 }
 
 
