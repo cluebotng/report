@@ -10,7 +10,7 @@ class ListPage extends Page
     {
         global $mysql;
         if (!isset($_REQUEST['showall'])) {
-            $where = ' WHERE `status` = 0 OR `status` = 3 OR `status` IN (2,5,6)';
+            $where = ' WHERE `status` IN (0,2,3,5,6)';
         } else {
             $where = '';
         }
