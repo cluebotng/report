@@ -63,7 +63,7 @@ class OptionsPage extends Page
         echo ($_SESSION['keyboard_shortcuts']) ? ' checked=checked' : '';
         echo ' /></p>';
 
-        echo '<p>Hide Anon: <input type="checkbox" id="hide_anon" name="hide_anon" value="No"';
+        echo '<p>Hide Anon: <input type="checkbox" id="hide_anon" name="hide_anon" value="Yes"';
         echo ($_SESSION['hide_anon']) ? ' checked=checked' : '';
         echo ' /></p>';
 
