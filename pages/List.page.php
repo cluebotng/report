@@ -31,6 +31,9 @@ class ListPage extends Page
     public function writeHeader()
     {
         echo 'List';
+        if ((isset($_SESSION['hide_anon'])) && ($_SESSION['hide_anon'])) {
+            echo ' (Anonymous hidden)';
+        }
     }
 
     public function writeContent()
