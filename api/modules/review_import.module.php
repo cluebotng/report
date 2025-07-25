@@ -13,25 +13,30 @@ class ApiModuleReviewImport extends ApiModule
         global $statuses, $mysql;
 
         /*
-         * From db/status.go:
-         *  const EDIT_CLASSIFICATION_VANDALISM = 0
-         *  const EDIT_CLASSIFICATION_CONSTRUCTIVE = 1
-         *  const EDIT_CLASSIFICATION_SKIPPED = 2
-         *  const EDIT_CLASSIFICATION_UNKNOWN = 3
+         * Needs to match the ids used in the API endpoint `_calculate_report_status`
         */
         $review_to_report_statuses = array(
-            0 => statusNameToId('Reviewed - Included in dataset as Vandalism'),
-            1 => statusNameToId('Reviewed - Included in dataset as Constructive'),
-            2 => statusNameToId('Reviewed - Not included in dataset'),
-            3 => statusNameToId('Partially reviewed'),
+            0 => statusNameToId('Queued to be reviewed'),
+            1 => statusNameToId('Partially reviewed'),
+            2 => statusNameToId('Reviewed - Included in dataset as Vandalism'),
+            3 => statusNameToId('Reviewed - Included in dataset as Constructive'),
+            4 => statusNameToId('Reviewed - Not included in dataset'),
         );
 
-        $edit_statuses = json_decode(file_get_contents('https://cluebotng-review.toolforge.org/api/report/export'));
-
         $expected_statuses = array();
+
+        // Legacy Report Interface Import
+        $edit_statuses = json_decode(file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/1/dump-report-status/'));
         foreach ($edit_statuses as $diff_id => $review_status_id) {
-            $report_status = $review_to_report_statuses[(int)$review_status_id];
-            if ($report_status) {
+            if ($report_status = $review_to_report_statuses[(int)$review_status_id]) {
+                $expected_statuses[(int)$diff_id] = $report_status;
+            }
+        }
+
+        // Report Interface Import
+        $edit_statuses = json_decode(file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/2/dump-report-status/'));
+        foreach ($edit_statuses as $diff_id => $review_status_id) {
+            if ($report_status = $review_to_report_statuses[(int)$review_status_id]) {
                 $expected_statuses[(int)$diff_id] = $report_status;
             }
         }
