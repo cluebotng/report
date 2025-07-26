@@ -34,4 +34,10 @@ CREATE TABLE `users` (
     `hide_anon` tinyint(1) DEFAULT 0,
 	PRIMARY KEY (`userid`),
 	UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+CREATE TABLE `edits_sent_for_review` (
+    `revertid` int(11) NOT NULL,
+    `userid` int(11) NOT NULL,
+    PRIMARY KEY (`revertid`, `userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;

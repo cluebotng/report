@@ -72,29 +72,7 @@ function createComment($id, $user, $comment, $forceUser = false)
     }
 }
 
-function updateStatusIfIncorrect($id, $statusId, $username)
-{
-    global $mysql;
-    $query = "SELECT `status` FROM `reports` WHERE `revertid` = ?";
-    if ($stmt = mysqli_prepare($mysql, $query)) {
-        mysqli_stmt_bind_param($stmt, "s", $id);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        $row = mysqli_fetch_assoc($result);
-        mysqli_stmt_close($stmt);
-        if ($row['status'] != $statusId) {
-            updateStatus($id, $statusId, $username);
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return false;
-    }
-}
-
-
-function updateStatus($id, $statusId, $username)
+function updateStatus($id, $statusId, $username, $userId = null)
 {
     global $mysql;
     $query = "UPDATE `reports` SET `status` = ? WHERE `revertid` = ?";
@@ -112,9 +90,25 @@ function updateStatus($id, $statusId, $username)
         $username . ' has marked this report as "' . statusIdToName($statusId) . '".',
         true
     );
+
+    // Track which user performed this in a side table
+    if ($statusId == 2 && $userId) {
+        recordUserSendingToReview($id, $userId);
+    }
+
     return true;
 }
 
+function recordUserSendingToReview($id, $userId)
+{
+    global $mysql;
+    $query = "INSERT IGNORE INTO `edits_sent_for_review` (`revertid`, `userid`) VALUES (?, ?)";
+    if ($stmt = mysqli_prepare($mysql, $query)) {
+        mysqli_stmt_bind_param($stmt, "ss", $id, $userId);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
+}
 
 function getReport($id)
 {

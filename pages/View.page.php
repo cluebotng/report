@@ -29,7 +29,7 @@ class ViewPage extends Page
         }
 
         if (isset($_REQUEST['status']) and isAdmin()) {
-            updateStatus($this->id, $_REQUEST['status'], $_SESSION['username']);
+            updateStatus($this->id, $_REQUEST['status'], $_SESSION['username'], $_SESSION['userid']);
 
             if (isset($_SESSION['next_on_review']) && $_SESSION['next_on_review'] === true) {
                 $result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `status` = 0 ORDER BY RAND() LIMIT 0, 1");
