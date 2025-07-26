@@ -2,7 +2,7 @@
 set -e
 #
 # Run within
-# `docker run -v $(pwd):/mnt -ti -p 127.0.0.1:8081:80 ubuntu:latest`
+# `podman run -v $(pwd):/mnt -ti -p 127.0.0.1:8081:80 ubuntu:latest`
 #
 export DEBIAN_FRONTEND=noninteractive
 
@@ -17,7 +17,7 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
 apt-get clean
 apt-get update
 
-apt-get install -y php7.2-cli php7.2-xml php7.2-curl php7.2-zip php7.2-fpm php7.2-mysql
+apt-get install -y php8.3-cli php8.3-xml php8.3-curl php8.3-zip php8.3-fpm php8.3-mysql
 
 # Setup FPM
 apt-get install -y nginx
@@ -31,7 +31,7 @@ server {
     index          index.php;
 
     location ~* \.php$ {
-        fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
         include         fastcgi_params;
         fastcgi_param   SCRIPT_FILENAME    $document_root$fastcgi_script_name;
         fastcgi_param   SCRIPT_NAME        $fastcgi_script_name;
@@ -40,5 +40,5 @@ server {
 EOF
 
 # Start the 2 deamons
-php-fpm7.2
+php-fpm8.3
 pgrep nginx && (killall -HUP nginx) || (nginx)
