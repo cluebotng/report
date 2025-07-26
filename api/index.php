@@ -32,11 +32,12 @@ if (!$mysql) {
     ), JSON_PRETTY_PRINT));
 }
 
-$module = ApiModule::find($_REQUEST['action']);
-if ($module) {
-    $module->header();
-    echo($module->content());
-    $module->footer();
+if (array_key_exists('action', $_REQUEST)) {
+    if ($module = ApiModule::find($_REQUEST['action'])) {
+        $module->header();
+        echo($module->content());
+        $module->footer();
+    }
 }
 
 @mysqli_close($mysql);
