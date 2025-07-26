@@ -1,4 +1,5 @@
 <?php
+
     static $cb_mysql_host = 'tools-db';
     static $cb_mysql_port = 3306;
     static $cb_mysql_user = getenv('TOOL_TOOLSDB_USER');
