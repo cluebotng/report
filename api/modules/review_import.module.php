@@ -21,6 +21,7 @@ class ApiModuleReviewImport extends ApiModule
             2 => statusNameToId('Reviewed - Included in dataset as Vandalism'),
             3 => statusNameToId('Reviewed - Included in dataset as Constructive'),
             4 => statusNameToId('Reviewed - Not included in dataset'),
+            5 => statusNameToId('Edit Data Has Been Removed'),
         );
 
         $expected_statuses = array();

@@ -10,7 +10,8 @@ $statuses = array(
     'Partially reviewed',
     'Reviewed - Included in dataset as Constructive',
     'Reviewed - Included in dataset as Vandalism',
-    'Reviewed - Not included in dataset'
+    'Reviewed - Not included in dataset',
+    'Edit Data Has Been Removed',
 );
 
 function statusIdToName($status)
