@@ -55,7 +55,7 @@ class ApiModuleReviewImport extends ApiModule
             // Load the edits we might want to update
             $query = 'SELECT `revertid`, `new_id`, `status` FROM `reports`';
             $query .= ' INNER JOIN `vandalism` ON (`vandalism`.`id` = `reports`.`revertid`)';
-            $query .= ' WHERE `status` NOT IN (0, 1, 3, 4)';
+            $query .= ' WHERE `status` NOT IN (0, 1, 3, 4, 5)';
             $query .= ' AND `new_id` IN (' . $diff_ids_sql . ')';
 
             // Update them if required
