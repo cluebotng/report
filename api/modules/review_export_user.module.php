@@ -21,10 +21,10 @@ class ApiModuleReviewUsersExport extends ApiModule
 
         $edits = array();
         while ($row = mysqli_fetch_assoc($result)) {
-            if (!array_key_exists($row['revertid'], $edits)) {
-                $edits[$row['revertid']] = array();
+            if (!array_key_exists($row['new_id'], $edits)) {
+                $edits[$row['new_id']] = array();
             }
-            array_push($edits[$row['revertid']], $row['username']);
+            array_push($edits[$row['new_id']], $row['username']);
         }
         mysqli_free_result($result);
 
