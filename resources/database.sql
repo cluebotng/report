@@ -39,5 +39,6 @@ CREATE TABLE `users` (
 CREATE TABLE `edits_sent_for_review` (
     `revertid` int(11) NOT NULL,
     `userid` int(11) NOT NULL,
-    PRIMARY KEY (`revertid`, `userid`)
+    PRIMARY KEY (`revertid`, `userid`),
+    CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`revertid`) REFERENCES `vandalism` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;

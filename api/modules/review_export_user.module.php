@@ -14,7 +14,9 @@ class ApiModuleReviewUsersExport extends ApiModule
         global $mysql;
         $result = mysqli_query(
             $mysql,
-            'SELECT `revertid`, `username` FROM `edits_sent_for_review` JOIN `users` ON `users`.`userid` = `edits_sent_for_review`.`userid`'
+            'SELECT `new_id`, `username` FROM `edits_sent_for_review` ' .
+            'JOIN `users` ON `users`.`userid` = `edits_sent_for_review`.`userid` ' .
+            'JOIN `vandalism` ON `vandalism`.`id` = `edits_sent_for_review`.`revertid`'
         );
 
         $edits = array();
