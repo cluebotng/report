@@ -40,6 +40,30 @@ class SignInPage extends Page
         }
     }
 
+    private function userHasRights($username)
+    {
+        $user = json_decode(file_get_contents('https://en.wikipedia.org/w/api.php?format=json&action=query&list=users&usprop=centralids|rights&ususers=' . urlencode($username)));
+        $user_rights = isset($user->query->users[0]) ? $user->query->users[0]->rights : array();
+
+        return (
+            in_array("rollback", $user_rights) or
+            in_array("block", $user_rights) or
+            in_array("deleterevision", $user_rights) or
+            in_array("editprotected", $user_rights)
+        );
+    }
+
+    private function makeUserAdmin($username)
+    {
+        global $mysql;
+        $query = "UPDATE `users` SET `admin` = 1 WHERE `username` = ?";
+        if ($stmt = mysqli_prepare($mysql, $query)) {
+            mysqli_stmt_bind_param($stmt, "s", $username);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+        }
+    }
+
     public function __construct()
     {
         global $oauth_consumer_key, $oauth_consumer_secret;
@@ -71,6 +95,12 @@ class SignInPage extends Page
             $user = $this->lookupUser($identity->username);
             if (!$user) {
                 $this->createUser($identity->username);
+                $user = $this->lookupUser($identity->username);
+            }
+
+            // Auto grant access if the user has wiki rights
+            if ($this->userHasRights($identity->username)) {
+                $this->makeUserAdmin($identity->username);
                 $user = $this->lookupUser($identity->username);
             }
 
