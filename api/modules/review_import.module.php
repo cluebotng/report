@@ -62,7 +62,7 @@ class ApiModuleReviewImport extends ApiModule
                 $expected_status = $expected_statuses[(int)$row['new_id']];
                 if ($expected_status && (int)$row['status'] !== $expected_status) {
                     array_push($updated_ids, (int)$row['new_id']);
-                    updateStatus($row['revertid'], $expected_status, 'Review Interface');
+                    updateStatus($row['revertid'], $expected_status, 'Review Interface', -3);
                 }
             }
             mysqli_free_result($results);

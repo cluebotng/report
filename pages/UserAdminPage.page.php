@@ -59,7 +59,7 @@ class UserAdminPage extends Page
     public function writeContent()
     {
         echo '<table border=1>';
-        echo '<tr><th>Actions</th><th>User ID</th><th>Username</th><th>Email</th><th>Admin</th></tr>';
+        echo '<tr><th>Actions</th><th>User ID</th><th>Username</th>><th>Admin</th></tr>';
         foreach ($this->users as $user) {
             echo '<tr>';
             echo '<td>';
