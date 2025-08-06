@@ -112,6 +112,7 @@ class SignInPage extends Page
                 $_SESSION['admin'] = $user['admin'] ? true : false;
                 $_SESSION['sadmin'] = $user['superadmin'] ? true : false;
                 $_SESSION['hide_anon'] = $user['hide_anon'] ? true : false;
+                $_SESSION['keyboard_shortcuts'] = $user['keyboard_shortcuts'] ? true : false;
 
                 header('Location: ?page=List');
                 die();
