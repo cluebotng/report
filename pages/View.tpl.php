@@ -55,15 +55,15 @@
                 } ?></a> &middot;
                 <a href="?page=View&id=<?PHP echo $this->row['id'];
                 ?>&status=1">Invalid<?PHP if (isset($_SESSION['keyboard_shortcuts']) && $_SESSION['keyboard_shortcuts'] === true) {
-    ?> (i)<?PHP
+    ?> (i|<)<?PHP
                 } ?></a> &middot;
                 <a href="?page=View&id=<?PHP echo $this->row['id'];
                 ?>&status=2">Defer to Review Interface<?PHP if (isset($_SESSION['keyboard_shortcuts']) && $_SESSION['keyboard_shortcuts'] === true) {
-    ?> (d)<?PHP
+    ?> (d|>)<?PHP
                 } ?></a> &middot;
                 <a href="?page=View&id=<?PHP echo $this->row['id'];
                 ?>&status=3">Bug<?PHP if (isset($_SESSION['keyboard_shortcuts']) && $_SESSION['keyboard_shortcuts'] === true) {
-    ?> (b)<?PHP
+    ?> (b|^)<?PHP
                 } ?></a> &middot;
                 <a href="?page=View&id=<?PHP echo $this->row['id'];
                 ?>&status=4">Resolved</a>
@@ -156,11 +156,11 @@ if (isset($_SESSION['username'])) {
 document.addEventListener('keydown', function (event) {
   if (event.key === 'r') {
     window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=0';
-  } else if (event.key === 'i') {
+  } else if (event.key === 'i' || e.code === 'ArrowLeft') {
     window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=1';
-  } else if (event.key === 'd') {
+  } else if (event.key === 'd' || e.code === 'ArrowRight') {
     window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=2';
-  } else if (event.key === 'b') {
+  } else if (event.key === 'b' || e.code === 'ArrowUp') {
     window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=3';
   }
 });
