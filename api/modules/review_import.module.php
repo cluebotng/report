@@ -26,19 +26,17 @@ class ApiModuleReviewImport extends ApiModule
 
         $expected_statuses = array();
 
-        // Legacy Report Interface Import
-        $edit_statuses = json_decode(file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/1/dump-report-status/'));
-        foreach ($edit_statuses as $diff_id => $review_status_id) {
-            if ($report_status = $review_to_report_statuses[(int)$review_status_id]) {
-                $expected_statuses[(int)$diff_id] = $report_status;
-            }
-        }
-
-        // Report Interface Import
-        $edit_statuses = json_decode(file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/2/dump-report-status/'));
-        foreach ($edit_statuses as $diff_id => $review_status_id) {
-            if ($report_status = $review_to_report_statuses[(int)$review_status_id]) {
-                $expected_statuses[(int)$diff_id] = $report_status;
+        // We have edits split up e.g. "Legacy Report Interface Import" & "Report Interface Import"
+        // Find all groups that are "Reported False Positives" and load them
+        $edit_groups = json_decode(file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/'), true);
+        foreach ($edit_groups as $edit_group) {
+            if ($edit_group["type"] == "Reported False Positives") {
+                $edit_statuses = json_decode(file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/' . $edit_group["id"] . '/dump-report-status/'));
+                foreach ($edit_statuses as $diff_id => $review_status_id) {
+                    if ($report_status = $review_to_report_statuses[(int)$review_status_id]) {
+                        $expected_statuses[(int)$diff_id] = $report_status;
+                    }
+                }
             }
         }
 
