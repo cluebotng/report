@@ -156,11 +156,11 @@ if (isset($_SESSION['username'])) {
 document.addEventListener('keydown', function (event) {
   if (event.key === 'r') {
     window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=0';
-  } else if (event.key === 'i' || e.code === 'ArrowLeft') {
+  } else if (event.key === 'i' || event.code === 'ArrowLeft') {
     window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=1';
-  } else if (event.key === 'd' || e.code === 'ArrowRight') {
+  } else if (event.key === 'd' || event.code === 'ArrowRight') {
     window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=2';
-  } else if (event.key === 'b' || e.code === 'ArrowUp') {
+  } else if (event.key === 'b' || event.code === 'ArrowUp') {
     window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=3';
   }
 });
