@@ -25,8 +25,6 @@ CREATE TABLE `comments` (
 CREATE TABLE `users` (
 	`userid` int(11) NOT NULL AUTO_INCREMENT,
 	`username` varchar(128) NOT NULL,
-	`password` varchar(128) NOT NULL DEFAULT '',
-	`email` varchar(128) NOT NULL DEFAULT '',
 	`admin` tinyint(1) NOT NULL DEFAULT 0,
 	`superadmin` tinyint(1) NOT NULL DEFAULT 0,
 	`next_on_review` tinyint(1) DEFAULT 1,

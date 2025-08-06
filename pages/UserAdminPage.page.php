@@ -40,13 +40,12 @@ class UserAdminPage extends Page
             die();
         }
 
-        $result = mysqli_query($mysql, 'SELECT `userid`, `username`, `email`, `admin`, `superadmin` FROM `users`');
+        $result = mysqli_query($mysql, 'SELECT `userid`, `username`, `admin`, `superadmin` FROM `users`');
         $this->users = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $this->users[] = array(
                 'id' => $row['userid'],
                 'user' => $row['username'],
-                'email' => $row['email'],
                 'admin' => $row['superadmin'] ? 'super' : ($row['admin'] ? 'yes' : 'no')
             );
         }
@@ -75,7 +74,6 @@ class UserAdminPage extends Page
             echo '</td>';
             echo '<td>' . $user['id'] . '</td>';
             echo '<td>' . htmlentities($user['user']) . '</td>';
-            echo '<td>' . htmlentities($user['email']) . '</td>';
             echo '<td>' . htmlentities($user['admin']) . '</td>';
             echo '</tr>';
         }
