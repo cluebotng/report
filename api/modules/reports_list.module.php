@@ -13,7 +13,7 @@ class ApiModuleReportsList extends ApiModule
         global $statuses, $mysql;
 
         $query = "SELECT * FROM `reports` JOIN `vandalism` ON `revertid` = `id`";
-        if (isset($_REQUEST['status']) && !empty($_REQUEST['status'])) {
+        if (isset($_REQUEST['status']) && (!empty($_REQUEST['status']) || $_REQUEST['status'] == '0')) {
             if (array_key_exists($_REQUEST['status'], $statuses)) {
                 $query .= " WHERE `status` = '" . mysqli_real_escape_string($mysql, $_REQUEST['status']) . "'";
             } else {
