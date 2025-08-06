@@ -46,7 +46,11 @@ class ViewPage extends Page
             updateStatus($this->row['id'], $_REQUEST['status'], $_SESSION['username'], $_SESSION['userid']);
 
             if (isset($_SESSION['next_on_review']) && $_SESSION['next_on_review'] === true) {
-                $result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `status` = 0 ORDER BY RAND() LIMIT 0, 1");
+                if (isset($_SESSION['hide_anon']) && $_SESSION['hide_anon'] === true) {
+                    $result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `status` = 0 AND `reporter` NOT LIKE '%Anonymous%' ORDER BY RAND() LIMIT 0, 1");
+                } else {
+                    $result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `status` = 0 ORDER BY RAND() LIMIT 0, 1");
+                }
                 if (mysqli_num_rows($result) > 0) {
                     $row = mysqli_fetch_assoc($result);
                     header('Location: ?page=View&id=' . $row['revertid']);
