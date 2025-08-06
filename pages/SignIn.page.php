@@ -12,7 +12,7 @@ class SignInPage extends Page
     private function lookupUser($username)
     {
         global $mysql;
-        $query = "SELECT `userid`, `username`, `admin`, `superadmin`, `next_on_review`, `hide_anon`
+        $query = "SELECT `userid`, `username`, `admin`, `superadmin`, `next_on_review`, `hide_anon`, `keyboard_shortcuts`
               FROM `users`
               WHERE `username` = ?";
         if ($stmt = mysqli_prepare($mysql, $query)) {
