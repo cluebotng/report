@@ -9,8 +9,3 @@
     static $oauth_consumer_key = getenv('OAUTH_KEY');
     static $oauth_consumer_secret = getenv('OAUTH_SECRET');
 
-    static $mw_mysql_host = 'enwiki.labsdb';
-    static $mw_mysql_port = 3306;
-    static $mw_mysql_user = getenv('TOOL_REPLICA_USER');
-    static $mw_mysql_pass = getenv('TOOL_REPLICA_PASSWORD');
-    static $mw_mysql_schema = 'enwiki_p';
