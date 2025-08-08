@@ -8,4 +8,3 @@
 
     $oauth_consumer_key = getenv('OAUTH_KEY');
     $oauth_consumer_secret = getenv('OAUTH_SECRET');
-
