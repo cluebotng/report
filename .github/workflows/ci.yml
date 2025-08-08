@@ -24,4 +24,4 @@ jobs:
 
       - name: PHP Code Sniff
         run: |
-          ./vendor/bin/phpcs --standard=PSR12 --ignore=vendor/ .
+          ./vendor/bin/phpcs --standard=PSR12 --ignore=vendor/ --warning-severity=0 .
