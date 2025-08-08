@@ -4,11 +4,10 @@
     "require-dev": {
         "overtrue/phplint": "@stable",
         "squizlabs/php_codesniffer": "^3.0",
-        "phpmd/phpmd" : "@stable"
+        "phpmd/phpmd": "@stable"
     },
     "require": {
-        "monolog/monolog": "^1.17",
-        "mediawiki/oauthclient": "^1.0"
+        "monolog/monolog": "^1.17"
     },
     "config": {
         "platform": {

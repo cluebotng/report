@@ -7,7 +7,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: docker-registry.tools.wmflabs.org/toolforge-php74-sssd-base:latest
+    container:
+      image: docker-registry.tools.wmflabs.org/toolforge-php82-sssd-base
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -23,4 +24,4 @@ jobs:
 
       - name: PHP Code Sniff
         run: |
-          ./vendor/bin/phpcs --standard=PSR12 --ignore=vendor/ --warning-severity=0 .
+          ./vendor/bin/phpcs --standard=PSR12 --ignore=vendor/ .
