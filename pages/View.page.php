@@ -16,7 +16,7 @@ class ViewPage extends Page
             if ($row = mysqli_fetch_assoc($result)) {
                 $this->row = $row;
             }
-        } else if ((int)$_REQUEST['new_id']) {
+        } elseif ((int)$_REQUEST['new_id']) {
             $result = mysqli_query($mysql, 'SELECT * FROM `vandalism` WHERE `new_id` = \'' . mysqli_real_escape_string($mysql, (int)$_REQUEST['new_id']) . '\'');
             if ($row = mysqli_fetch_assoc($result)) {
                 $this->row = $row;
