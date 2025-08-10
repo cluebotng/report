@@ -7,7 +7,9 @@
         "phpmd/phpmd": "@stable"
     },
     "require": {
-        "monolog/monolog": "^1.17"
+        "monolog/monolog": "^1.17",
+        "mediawiki/oauthclient": "^2.3",
+        "ext-redis": "*"
     },
     "config": {
         "platform": {
