@@ -154,6 +154,11 @@ if (isset($_SESSION['username'])) {
 <?PHP if (isAdmin() && (isset($_SESSION['keyboard_shortcuts']) && $_SESSION['keyboard_shortcuts'] === true)) { ?>
 <script type="text/javascript">
 document.addEventListener('keydown', function (event) {
+  if (event.target.name === "comment") {
+      // Ignore if typing in the comment box
+      return;
+  }
+
   if (event.key === 'r') {
     window.location = '?page=View&id=<?PHP echo $this->row['id']; ?>&status=0';
   } else if (event.key === 'i' || event.code === 'ArrowLeft') {
