@@ -47,9 +47,9 @@ class ViewPage extends Page
 
             if (isset($_SESSION['next_on_review']) && $_SESSION['next_on_review'] === true) {
                 if (isset($_SESSION['hide_anon']) && $_SESSION['hide_anon'] === true) {
-                    $result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `status` = 0 AND `reporter` NOT LIKE '%Anonymous%' ORDER BY RAND() LIMIT 0, 1");
+                    $result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `status` = 0 AND `reporter` NOT LIKE '%Anonymous%' ORDER BY `revertid` ASC LIMIT 0, 1");
                 } else {
-                    $result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `status` = 0 ORDER BY RAND() LIMIT 0, 1");
+                    $result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `status` = 0 ORDER BY `revertid` ASC LIMIT 0, 1");
                 }
                 if (mysqli_num_rows($result) > 0) {
                     $row = mysqli_fetch_assoc($result);
