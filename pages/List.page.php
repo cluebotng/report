@@ -23,7 +23,7 @@ class ListPage extends Page
         }
 
         $limit = 'LIMIT ' . mysqli_real_escape_string($mysql, $this->current_page * $entries_per_page) . ',' . mysqli_real_escape_string($mysql, $entries_per_page);
-        $result = mysqli_query($mysql, 'SELECT `revertid`, `reporter`, `status` FROM `reports`' . $where . ' ORDER BY `status` ASC ' . $limit);
+        $result = mysqli_query($mysql, 'SELECT `revertid`, `reporter`, `status` FROM `reports`' . $where . ' ORDER BY `status`, `revertid` ASC ' . $limit);
         $this->ids = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $this->ids[] = array(
