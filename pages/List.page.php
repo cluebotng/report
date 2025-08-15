@@ -22,7 +22,7 @@ class ListPage extends Page
             $where = '';
         }
 
-        $limit = 'LIMIT ' . mysqli_real_escape_string($mysql, $this->current_page) . ',' . mysqli_real_escape_string($mysql, $entries_per_page);
+        $limit = 'LIMIT ' . mysqli_real_escape_string($mysql, $this->current_page * $entries_per_page) . ',' . mysqli_real_escape_string($mysql, $entries_per_page);
         $result = mysqli_query($mysql, 'SELECT `revertid`, `reporter`, `status` FROM `reports`' . $where . ' ORDER BY `status` ASC ' . $limit);
         $this->ids = array();
         while ($row = mysqli_fetch_assoc($result)) {
