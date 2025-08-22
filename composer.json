@@ -9,12 +9,8 @@
     "require": {
         "monolog/monolog": "^1.17",
         "mediawiki/oauthclient": "^2.3",
-        "ext-redis": "*"
-    },
-    "config": {
-        "platform": {
-            "php": "8.4"
-        }
+        "ext-redis": "*",
+        "php": ">=8.4"
     },
     "license": "GNU General Public License"
 }

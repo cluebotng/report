@@ -1,6 +1,6 @@
 name: Release
 on:
-  push: {tags: ['*']}
+  push: { tags: [ 'v*' ] }
 permissions:
   deployments: write
   contents: write
