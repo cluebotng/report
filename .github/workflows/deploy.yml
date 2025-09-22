@@ -16,3 +16,14 @@ jobs:
           task: deploy-report
           release: ${{ github.ref }}
           ssh_key: ${{ secrets.CI_SSH_KEY }}
+
+  update-components:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cluebotng/ci-update-component-ref@main
+        with:
+          tool: 'cluebotng-review'
+          component: 'cluebotng-reviewer'
+          ref: '${{ github.ref }}'
+          gh_app_key: '${{ secrets.CI_COMPONENT_CONFIGS_APP_KEY }}'
+
