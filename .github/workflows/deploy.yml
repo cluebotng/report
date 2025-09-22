@@ -22,8 +22,7 @@ jobs:
     steps:
       - uses: cluebotng/ci-update-component-ref@main
         with:
-          tool: 'cluebotng-review'
-          component: 'cluebotng-reviewer'
+          repository: 'https://github.com/cluebotng/report.git'
           ref: '${{ github.ref }}'
           gh_app_key: '${{ secrets.CI_COMPONENT_CONFIGS_APP_KEY }}'
 
