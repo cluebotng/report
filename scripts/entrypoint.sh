@@ -9,5 +9,8 @@ redis.session.locking_enabled = 1
 redis.session.compression = zstd
 EOF
 
+# Force port
+export PORT=8000
+
 # Launch apache/php-fpm
 exec launcher heroku-php-apache2
