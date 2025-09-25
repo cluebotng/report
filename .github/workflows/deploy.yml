@@ -1,22 +1,6 @@
 name: Deploy
-on: { push: { tags: ['*'] } }
-permissions:
-  contents: read
+on: { push: { tags: [ 'v*' ] } }
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: cluebotng/utilities
-          ref: main
-
-      - uses: cluebotng/ci-execute-fabric@main
-        with:
-          task: deploy-report
-          release: ${{ github.ref }}
-          ssh_key: ${{ secrets.CI_SSH_KEY }}
-
   update-components:
     runs-on: ubuntu-latest
     steps:
@@ -26,4 +10,3 @@ jobs:
           repository: 'https://github.com/cluebotng/report.git'
           ref: '${{ github.ref }}'
           gh_app_key: '${{ secrets.CI_COMPONENT_CONFIGS_APP_KEY }}'
-
