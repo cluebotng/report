@@ -44,7 +44,8 @@ class ApiModuleReviewImport extends ApiModule
                 $raw = @file_get_contents(
                     'https://cluebotng-review.toolforge.org/api/v1/edit-groups/' . $edit_group["id"] . '/dump-report-status/',
                     false,
-                    $context);
+                    $context
+                );
                 if ($raw != null) {
                     $processed_groups[] = $edit_group["id"];
                     foreach (json_decode($raw) as $diff_id => $review_status_id) {
