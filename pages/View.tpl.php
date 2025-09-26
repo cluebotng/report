@@ -16,7 +16,11 @@
         <td class="diffborder">
             <?PHP
                 $context  = stream_context_create(array('http' => array('user_agent' => 'ClueBot NG Report Interface')));
-                echo file_get_contents('https://en.wikipedia.org/w/index.php?diffonly=1&action=render&diff=' . urlencode($this->row['new_id']), false, $context);
+                echo file_get_contents(
+                        'https://en.wikipedia.org/w/index.php?diffonly=1&action=render&diff=' . urlencode($this->row['new_id']),
+                        false,
+                        $context
+                );
             ?>
         </td>
     </tr>

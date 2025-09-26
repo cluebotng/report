@@ -10,7 +10,7 @@ class ApiModuleReviewImport extends ApiModule
 {
     public function content()
     {
-        global $statuses, $mysql;
+        global $mysql;
 
         /*
          * Needs to match the ids used in the API endpoint `_calculate_report_status`
@@ -29,7 +29,11 @@ class ApiModuleReviewImport extends ApiModule
 
         // We have edits split up e.g. "Legacy Report Interface Import" & "Report Interface Import"
         // Find all groups that are "Reported False Positives" and load them
-        $raw = @file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/', false, $context);
+        $raw = @file_get_contents(
+            'https://cluebotng-review.toolforge.org/api/v1/edit-groups/',
+            false,
+            $context
+        );
         if ($raw == null) {
             return json_encode(array("error" => "Failed to retrieve edit groups"), JSON_PRETTY_PRINT);
         }
@@ -37,7 +41,10 @@ class ApiModuleReviewImport extends ApiModule
         $processed_groups = array();
         foreach ($edit_groups as $edit_group) {
             if ($edit_group["type"] == "Reported False Positives") {
-                $raw = @file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/' . $edit_group["id"] . '/dump-report-status/', false, $context);
+                $raw = @file_get_contents(
+                    'https://cluebotng-review.toolforge.org/api/v1/edit-groups/' . $edit_group["id"] . '/dump-report-status/',
+                    false,
+                    $context);
                 if ($raw != null) {
                     $processed_groups[] = $edit_group["id"];
                     foreach (json_decode($raw) as $diff_id => $review_status_id) {

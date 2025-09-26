@@ -23,7 +23,9 @@ class ApiModuleReviewExport extends ApiModule
 
         $result = mysqli_query(
             $mysql,
-            'SELECT `new_id` FROM `reports` JOIN `vandalism` ON `revertid` = `id` WHERE `status` IN (' . $status_ids_sql . ')'
+            'SELECT `new_id` FROM `reports` 
+                       JOIN `vandalism` ON `revertid` = `id` 
+                   WHERE `status` IN (' . $status_ids_sql . ')'
         );
 
         $ids = array();
