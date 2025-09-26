@@ -59,7 +59,8 @@ class OptionsPage extends Page
         echo ($_SESSION['next_on_review']) ? ' checked=checked' : '';
         echo ' /></p>';
 
-        echo '<p>Review keyboard shortcuts: <input type="checkbox" id="keyboard_shortcuts" name="keyboard_shortcuts" value="Yes"';
+        echo '<p>Review keyboard shortcuts: ';
+        echo '<input type="checkbox" id="keyboard_shortcuts" name="keyboard_shortcuts" value="Yes"';
         echo ($_SESSION['keyboard_shortcuts']) ? ' checked=checked' : '';
         echo ' /></p>';
 

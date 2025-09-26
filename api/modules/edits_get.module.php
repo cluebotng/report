@@ -10,7 +10,7 @@ class ApiModuleEditsGet extends ApiModule
 {
     public function content()
     {
-        global $statuses, $mysql;
+        global $mysql;
 
         $conditions = array();
         if (isset($_REQUEST['edit_id']) && !empty($_REQUEST['edit_id'])) {
@@ -62,7 +62,9 @@ class ApiModuleEditsGet extends ApiModule
                 $data['score'] = (float)$matches[1];
             }
 
-            $beaten_result = mysqli_query($mysql, "SELECT * FROM `beaten` WHERE `diff` = '" . mysqli_real_escape_string($mysql, $row['diff']) . "'");
+            $diffEscaped = mysqli_real_escape_string($mysql, $row['diff']);
+            $beaten_query = "SELECT * FROM `beaten` WHERE `diff` = '" . $diffEscaped . "'";
+            $beaten_result = mysqli_query($mysql, $beaten_query);
             if (mysqli_num_rows($beaten_result) > 0) {
                 $data['beaten'] = true;
 
@@ -70,13 +72,15 @@ class ApiModuleEditsGet extends ApiModule
                 $data['beaten_by'] = $beaten_row['user'];
             }
 
-            $report_result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['id']) . "'");
+            $idEscaped = mysqli_real_escape_string($mysql, $row['id']);
+            $report_query = "SELECT * FROM `reports` WHERE `revertid` = '" . $idEscaped . "'";
+            $report_result = mysqli_query($mysql, $report_query);
             if (mysqli_num_rows($report_result) > 0) {
                 $report_row = mysqli_fetch_assoc($report_result);
                 $data['report'] = array(
                     "timestamp" => strtotime($report_row['timestamp']),
                     "reporter" => $report_row['reporter'],
-                    "status" => $statuses[$report_row['status']],
+                    "status" => STATUSES[$report_row['status']] ?? null,
                     "status_id" => (int)$report_row['status'],
                 );
             }

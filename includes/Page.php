@@ -26,7 +26,11 @@ class Page
         }
 
         if (!$requireAdmin or (isset($_SESSION['sadmin']) and $_SESSION['sadmin'] === true)) {
-            self::$pages[$name] = array('visible' => $visible, 'class' => '\\ReportInterface\\' . $className, 'sort' => $sort);
+            self::$pages[$name] = array(
+                'visible' => $visible,
+                'class' => '\\ReportInterface\\' . $className,
+                'sort' => $sort
+            );
         }
     }
 

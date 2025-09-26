@@ -16,7 +16,7 @@ class Metrics extends ApiModule
 
     public function content()
     {
-        global $statuses, $mysql;
+        global $mysql;
 
         $output = "";
 
@@ -26,7 +26,7 @@ class Metrics extends ApiModule
 
         $report_count_by_status = mysqli_query($mysql, "SELECT COUNT(*) as `count`, `status` FROM `reports` GROUP BY `status`");
         while ($row = mysqli_fetch_assoc($report_count_by_status)) {
-            $output .= "cbng_report_number_of_reports_by_status{status=\"" . $statuses[$row["status"]] . "\"} " . $row["count"] . "\n";
+            $output .= "cbng_report_number_of_reports_by_status{status=\"" . (STATUSES[$row["status"]] ?? '') . "\"} " . $row["count"] . "\n";
         }
 
         // Vandalism
