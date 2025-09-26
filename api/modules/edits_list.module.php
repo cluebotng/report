@@ -10,34 +10,42 @@ class ApiModuleEditsList extends ApiModule
 {
     public function content()
     {
-        global $statuses, $mysql;
+        global $mysql;
 
         $data = array();
 
         $conditions = array();
         if (isset($_REQUEST['after_edit_id']) && !empty($_REQUEST['after_edit_id'])) {
-            array_push($conditions, "`id` >= '" . mysqli_real_escape_string($mysql, $_REQUEST['edit_id']) . "'");
+            $escape = mysqli_real_escape_string($mysql, $_REQUEST['edit_id']);
+            array_push($conditions, "`id` >= '" . $escape . "'");
         }
         if (isset($_REQUEST['user']) && !empty($_REQUEST['user'])) {
-            array_push($conditions, "`user` = '" . mysqli_real_escape_string($mysql, $_REQUEST['user']) . "'");
+            $escape = mysqli_real_escape_string($mysql, $_REQUEST['user']);
+            array_push($conditions, "`user` = '" . $escape . "'");
         }
         if (isset($_REQUEST['article']) && !empty($_REQUEST['article'])) {
-            array_push($conditions, "`article` = '" . mysqli_real_escape_string($mysql, $_REQUEST['article']) . "'");
+            $escape = mysqli_real_escape_string($mysql, $_REQUEST['article']);
+            array_push($conditions, "`article` = '" . $escape . "'");
         }
         if (isset($_REQUEST['heuristic']) && !empty($_REQUEST['heuristic'])) {
-            array_push($conditions, "`heuristic` = '" . mysqli_real_escape_string($mysql, $_REQUEST['heuristic']) . "'");
+            $escape = mysqli_real_escape_string($mysql, $_REQUEST['heuristic']);
+            array_push($conditions, "`heuristic` = '" . $escape . "'");
         }
         if (isset($_REQUEST['regex']) && !empty($_REQUEST['regex'])) {
-            array_push($conditions, "`regex` = '" . mysqli_real_escape_string($mysql, $_REQUEST['regex']) . "'");
+            $escape = mysqli_real_escape_string($mysql, $_REQUEST['regex']);
+            array_push($conditions, "`regex` = '" . $escape . "'");
         }
         if (isset($_REQUEST['old_id']) && !empty($_REQUEST['old_id'])) {
-            array_push($conditions, "`old_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['old_id']) . "'");
+            $escape = mysqli_real_escape_string($mysql, $_REQUEST['old_id']);
+            array_push($conditions, "`old_id` = '" . $escape . "'");
         }
         if (isset($_REQUEST['new_id']) && !empty($_REQUEST['new_id'])) {
-            array_push($conditions, "`new_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['new_id']) . "'");
+            $escape = mysqli_real_escape_string($mysql, $_REQUEST['new_id']);
+            array_push($conditions, "`new_id` = '" . $escape . "'");
         }
         if (isset($_REQUEST['reverted']) && !empty($_REQUEST['reverted'])) {
-            array_push($conditions, "`reverted` = '" . mysqli_real_escape_string($mysql, $_REQUEST['reverted']) . "'");
+            $escape = mysqli_real_escape_string($mysql, $_REQUEST['reverted']);
+            array_push($conditions, "`reverted` = '" . $escape . "'");
         }
 
         $query = "SELECT * FROM `vandalism`";
@@ -74,7 +82,9 @@ class ApiModuleEditsList extends ApiModule
                 $data['edit-' . $row['id']]['score'] = (float)$matches[1];
             }
 
-            $beaten_result = mysqli_query($mysql, "SELECT * FROM `beaten` WHERE `diff` = '" . mysqli_real_escape_string($mysql, $row['diff']) . "'");
+            $escape = mysqli_real_escape_string($mysql, $row['diff']);
+            $beaten_query = "SELECT * FROM `beaten` WHERE `diff` = '" . $escape . "'";
+            $beaten_result = mysqli_query($mysql, $beaten_query);
             if (mysqli_num_rows($beaten_result) > 0) {
                 $data['edit-' . $row['id']]['beaten'] = true;
 
@@ -82,13 +92,15 @@ class ApiModuleEditsList extends ApiModule
                 $data['edit-' . $row['id']]['beaten_by'] = $beaten_row['user'];
             }
 
-            $report_result = mysqli_query($mysql, "SELECT * FROM `reports` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['id']) . "'");
+            $escape = mysqli_real_escape_string($mysql, $row['id']);
+            $report_query = "SELECT * FROM `reports` WHERE `revertid` = '" . $escape . "'";
+            $report_result = mysqli_query($mysql, $report_query);
             if (mysqli_num_rows($report_result) > 0) {
                 $report_row = mysqli_fetch_assoc($report_result);
                 $data['edit-' . $row['id']]['report'] = array(
                     "timestamp" => strtotime($report_row['timestamp']),
                     "reporter" => $report_row['reporter'],
-                    "status" => $statuses[$report_row['status']],
+                    "status" => STATUSES[$report_row['status']] ?? null,
                     "status_id" => $report_row['status'],
                 );
             }

@@ -1,6 +1,6 @@
 <?PHP
 
-$statuses = array(
+const STATUSES = [
     'Reported',
     'Invalid',
     'Sending to Review Interface',
@@ -12,18 +12,16 @@ $statuses = array(
     'Reviewed - Included in dataset as Vandalism',
     'Reviewed - Not included in dataset',
     'Edit Data Has Been Removed',
-);
+];
 
 function statusIdToName($status)
 {
-    global $statuses;
-    return $statuses[$status];
+    return STATUSES[$status] ?? null;
 }
 
 function statusNameToId($status)
 {
-    global $statuses;
-    return array_search($status, $statuses);
+    return array_search($status, STATUSES, true);
 }
 
 function createReport($id, $user)
@@ -211,7 +209,11 @@ function isSAdmin()
 function userHasWikiRights($username)
 {
     $context  = stream_context_create(array('http' => array('user_agent' => 'ClueBot NG Report Interface')));
-    $raw = @file_get_contents('https://en.wikipedia.org/w/api.php?format=json&action=query&list=users&usprop=centralids|rights&ususers=' . urlencode($username), false, $context);
+    $raw = @file_get_contents(
+        'https://en.wikipedia.org/w/api.php?format=json&action=query&list=users&usprop=centralids|rights&ususers=' . urlencode($username),
+        false,
+        $context
+    );
     if ($raw != null) {
         $user = json_decode($raw);
         $user_rights = isset($user->query->users[0]->rights) ? $user->query->users[0]->rights : array();

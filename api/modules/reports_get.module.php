@@ -10,7 +10,7 @@ class ApiModuleReportsGet extends ApiModule
 {
     public function content()
     {
-        global $statuses, $mysql;
+        global $mysql;
 
         $query = "SELECT * FROM `reports`";
         if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
@@ -35,13 +35,15 @@ class ApiModuleReportsGet extends ApiModule
             "revertid" => (int)$report_row['revertid'],
             "timestamp" => strtotime($report_row['timestamp']),
             "reporter" => $report_row['reporter'],
-            "status" => $statuses[$report_row['status']],
+            "status" => STATUSES[$report_row['status']] ?? null,
             "status_id" => (int)$report_row['status'],
             "comments" => array(),
         );
         mysqli_free_result($result);
 
-        $comment_result = mysqli_query($mysql, "SELECT * FROM `comments` WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $row['revertid']) . "'");
+        $idEscaped = mysqli_real_escape_string($mysql, $report_row['revertid']);
+        $comment_query = "SELECT * FROM `comments` WHERE `revertid` = '" . $idEscaped . "'";
+        $comment_result = mysqli_query($mysql, $comment_query);
         while ($comment_row = mysqli_fetch_assoc($comment_result)) {
             array_push($data['comments'], array(
                 "timestamp" => strtotime($comment_row['timestamp']),
