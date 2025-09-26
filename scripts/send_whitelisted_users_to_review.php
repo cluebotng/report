@@ -22,8 +22,9 @@ if (!$mysql) {
 
 $result = mysqli_query($mysql, 'SELECT `revertid`, `user` FROM `reports` INNER JOIN `vandalism` on `vandalism`.`id` = `reports`.`revertid` WHERE `status` = 0');
 while ($row = mysqli_fetch_assoc($result)) {
+    echo 'Checking ' . $row['revertid'] . ' (' . $row['user'] . ')' . "\n";
     if (in_array($row['user'], $whitelist) || userHasWikiRights($row['user'])) {
-        echo 'Sending ' . $row['revertid'] . ' (' . $row['user'] . ') to review interface\n';
+        echo 'Sending ' . $row['revertid'] . ' (' . $row['user'] . ') to review interface' . "\n";
         updateStatus($row['revertid'], 2, 'Report Interface', -2);
     }
 }
