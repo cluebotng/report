@@ -26,15 +26,24 @@ class ApiModuleReviewImport extends ApiModule
 
         $expected_statuses = array();
 
+        $context  = stream_context_create(array('http' => array('user_agent' => 'ClueBot NG Report Interface')));
+
         // We have edits split up e.g. "Legacy Report Interface Import" & "Report Interface Import"
         // Find all groups that are "Reported False Positives" and load them
-        $edit_groups = json_decode(file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/'), true);
+        $raw = @file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/', false, $context);
+        if ($raw == null) {
+            return json_encode(array("error" => "Failed to retrieve edit groups"), JSON_PRETTY_PRINT);
+        }
+        $edit_groups = json_decode($raw, true);
         foreach ($edit_groups as $edit_group) {
             if ($edit_group["type"] == "Reported False Positives") {
-                $edit_statuses = json_decode(file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/' . $edit_group["id"] . '/dump-report-status/'));
-                foreach ($edit_statuses as $diff_id => $review_status_id) {
-                    if ($report_status = $review_to_report_statuses[(int)$review_status_id]) {
-                        $expected_statuses[(int)$diff_id] = $report_status;
+                $raw = @file_get_contents('https://cluebotng-review.toolforge.org/api/v1/edit-groups/' . $edit_group["id"] . '/dump-report-status/', false, $context);
+                if ($raw != null) {
+                    $edit_statuses = json_decode($raw);
+                    foreach ($edit_statuses as $diff_id => $review_status_id) {
+                        if ($report_status = $review_to_report_statuses[(int)$review_status_id]) {
+                            $expected_statuses[(int)$diff_id] = $report_status;
+                        }
                     }
                 }
             }

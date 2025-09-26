@@ -19,13 +19,20 @@ class ReportPage extends Page
             }
         }
 
-        if (getReport($id) !== null) {
+        $result = mysqli_query($mysql, 'SELECT * FROM `vandalism` WHERE `id` = \'' . mysqli_real_escape_string($mysql, $_REQUEST['id']) . '\'');
+        $this->row = mysqli_fetch_assoc($result);
+
+        $report = getReport($id);
+        if ($report !== null) {
+            // If the edit user has elevated wiki rights, or is whitelisted by Huggle, then
+            // treat them as 'semi-trusted' and send directly to the review interface.
+            if (userHasWikiRights($this->row['user'])) {
+                updateStatus($report['id'], 2, 'Report Interface', -2);
+            }
+
             header('Location: ?page=View&id=' . $id);
             die();
         }
-
-        $result = mysqli_query($mysql, 'SELECT * FROM `vandalism` WHERE `id` = \'' . mysqli_real_escape_string($mysql, $_REQUEST['id']) . '\'');
-        $this->row = mysqli_fetch_assoc($result);
     }
 
     public function writeHeader()
@@ -42,7 +49,10 @@ class ReportPage extends Page
         echo '<tr><th>User:</th><td>' . $this->row['user'] . '</td></tr>';
         echo '<tr><th>Article:</th><td>' . $this->row['article'] . '</td></tr>';
         echo '<tr><th>Diff:</th><td style="border: 1px dashed #000000">';
-        echo file_get_contents('https://en.wikipedia.org/w/index.php?diffonly=1&action=render&diff=' . urlencode($this->row['new_id']));
+
+        $context = stream_context_create(array('http' => array('user_agent' => 'ClueBot NG Report Interface')));
+        echo file_get_contents('https://en.wikipedia.org/w/index.php?diffonly=1&action=render&diff=' . urlencode($this->row['new_id']), false, $context);
+
         echo '</td></tr>';
         echo '<tr><th>Reason:</th><td>' . $this->row['reason'] . '</td></tr>';
         $user = 'Anonymous';

@@ -207,3 +207,21 @@ function isSAdmin()
     }
     return false;
 }
+
+function userHasWikiRights($username)
+{
+    $context  = stream_context_create(array('http' => array('user_agent' => 'ClueBot NG Report Interface')));
+    $raw = @file_get_contents('https://en.wikipedia.org/w/api.php?format=json&action=query&list=users&usprop=centralids|rights&ususers=' . urlencode($username), false, $context);
+    if ($raw != null) {
+        $user = json_decode($raw);
+        $user_rights = isset($user->query->users[0]->rights) ? $user->query->users[0]->rights : array();
+
+        return (
+            in_array("rollback", $user_rights) or
+            in_array("block", $user_rights) or
+            in_array("deleterevision", $user_rights) or
+            in_array("editprotected", $user_rights)
+        );
+    }
+    return false;
+}
