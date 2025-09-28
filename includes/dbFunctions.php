@@ -24,6 +24,11 @@ function statusNameToId($status)
     return array_search($status, STATUSES, true);
 }
 
+function isValidStatusId($status)
+{
+    return array_key_exists($status, STATUSES);
+}
+
 function createReport($id, $user)
 {
     global $mysql;
@@ -216,7 +221,7 @@ function userHasWikiRights($username)
     );
     if ($raw != null) {
         $user = json_decode($raw);
-        $user_rights = isset($user->query->users[0]->rights) ? $user->query->users[0]->rights : array();
+        $user_rights = $user->query->users[0]->rights ?? array();
 
         return (
             in_array("rollback", $user_rights) or

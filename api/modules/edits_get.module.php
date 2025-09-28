@@ -13,14 +13,14 @@ class ApiModuleEditsGet extends ApiModule
         global $mysql;
 
         $conditions = array();
-        if (isset($_REQUEST['edit_id']) && !empty($_REQUEST['edit_id'])) {
-            array_push($conditions, "`id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['edit_id']) . "'");
+        if (!empty($_REQUEST['edit_id'])) {
+            $conditions[] = "`id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['edit_id']) . "'";
         }
-        if (isset($_REQUEST['old_id']) && !empty($_REQUEST['old_id'])) {
-            array_push($conditions, "`old_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['old_id']) . "'");
+        if (!empty($_REQUEST['old_id'])) {
+            $conditions[] = "`old_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['old_id']) . "'";
         }
-        if (isset($_REQUEST['new_id']) && !empty($_REQUEST['new_id'])) {
-            array_push($conditions, "`new_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['new_id']) . "'");
+        if (!empty($_REQUEST['new_id'])) {
+            $conditions[] = "`new_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['new_id']) . "'";
         }
 
         if (count($conditions) === 0) {
@@ -80,7 +80,7 @@ class ApiModuleEditsGet extends ApiModule
                 $data['report'] = array(
                     "timestamp" => strtotime($report_row['timestamp']),
                     "reporter" => $report_row['reporter'],
-                    "status" => STATUSES[$report_row['status']] ?? null,
+                    "status" => statusIdToName($report_row['status']),
                     "status_id" => (int)$report_row['status'],
                 );
             }

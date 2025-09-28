@@ -24,7 +24,7 @@ class ApiModuleReviewUsersExport extends ApiModule
             if (!array_key_exists($row['new_id'], $edits)) {
                 $edits[$row['new_id']] = array();
             }
-            array_push($edits[$row['new_id']], $row['username']);
+            $edits[$row['new_id']][] = $row['username'];
         }
         mysqli_free_result($result);
 

@@ -1,7 +1,7 @@
 <?PHP
 
 ini_set('display_errors', 'Off');
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL);
 session_start();
 
 require_once 'vendor/autoload.php';

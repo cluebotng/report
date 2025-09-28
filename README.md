@@ -1,4 +1,4 @@
-ClueBot NG - Report Interface
+ClueBot NG — Report Interface
 =============================
 
 The report interface handles false positive submission reports & interacts with the local database.

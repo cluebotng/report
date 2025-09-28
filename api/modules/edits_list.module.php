@@ -15,37 +15,37 @@ class ApiModuleEditsList extends ApiModule
         $data = array();
 
         $conditions = array();
-        if (isset($_REQUEST['after_edit_id']) && !empty($_REQUEST['after_edit_id'])) {
+        if (!empty($_REQUEST['after_edit_id'])) {
             $escape = mysqli_real_escape_string($mysql, $_REQUEST['edit_id']);
-            array_push($conditions, "`id` >= '" . $escape . "'");
+            $conditions[] = "`id` >= '" . $escape . "'";
         }
-        if (isset($_REQUEST['user']) && !empty($_REQUEST['user'])) {
+        if (!empty($_REQUEST['user'])) {
             $escape = mysqli_real_escape_string($mysql, $_REQUEST['user']);
-            array_push($conditions, "`user` = '" . $escape . "'");
+            $conditions[] = "`user` = '" . $escape . "'";
         }
-        if (isset($_REQUEST['article']) && !empty($_REQUEST['article'])) {
+        if (!empty($_REQUEST['article'])) {
             $escape = mysqli_real_escape_string($mysql, $_REQUEST['article']);
-            array_push($conditions, "`article` = '" . $escape . "'");
+            $conditions[] = "`article` = '" . $escape . "'";
         }
-        if (isset($_REQUEST['heuristic']) && !empty($_REQUEST['heuristic'])) {
+        if (!empty($_REQUEST['heuristic'])) {
             $escape = mysqli_real_escape_string($mysql, $_REQUEST['heuristic']);
-            array_push($conditions, "`heuristic` = '" . $escape . "'");
+            $conditions[] = "`heuristic` = '" . $escape . "'";
         }
-        if (isset($_REQUEST['regex']) && !empty($_REQUEST['regex'])) {
+        if (!empty($_REQUEST['regex'])) {
             $escape = mysqli_real_escape_string($mysql, $_REQUEST['regex']);
-            array_push($conditions, "`regex` = '" . $escape . "'");
+            $conditions[] = "`regex` = '" . $escape . "'";
         }
-        if (isset($_REQUEST['old_id']) && !empty($_REQUEST['old_id'])) {
+        if (!empty($_REQUEST['old_id'])) {
             $escape = mysqli_real_escape_string($mysql, $_REQUEST['old_id']);
-            array_push($conditions, "`old_id` = '" . $escape . "'");
+            $conditions[] = "`old_id` = '" . $escape . "'";
         }
-        if (isset($_REQUEST['new_id']) && !empty($_REQUEST['new_id'])) {
+        if (!empty($_REQUEST['new_id'])) {
             $escape = mysqli_real_escape_string($mysql, $_REQUEST['new_id']);
-            array_push($conditions, "`new_id` = '" . $escape . "'");
+            $conditions[] = "`new_id` = '" . $escape . "'";
         }
-        if (isset($_REQUEST['reverted']) && !empty($_REQUEST['reverted'])) {
+        if (!empty($_REQUEST['reverted'])) {
             $escape = mysqli_real_escape_string($mysql, $_REQUEST['reverted']);
-            array_push($conditions, "`reverted` = '" . $escape . "'");
+            $conditions[] = "`reverted` = '" . $escape . "'";
         }
 
         $query = "SELECT * FROM `vandalism`";
@@ -54,7 +54,7 @@ class ApiModuleEditsList extends ApiModule
         }
 
         $query .= " ORDER BY " . ((isset($_REQUEST['random'])) ? "RAND()" : "id DESC");
-        if (isset($_REQUEST['limit']) && !empty($_REQUEST['limit'])) {
+        if (!empty($_REQUEST['limit'])) {
             $query .= " LIMIT 0, " . (int)$_REQUEST['limit'];
         }
 
@@ -100,7 +100,7 @@ class ApiModuleEditsList extends ApiModule
                 $data['edit-' . $row['id']]['report'] = array(
                     "timestamp" => strtotime($report_row['timestamp']),
                     "reporter" => $report_row['reporter'],
-                    "status" => STATUSES[$report_row['status']] ?? null,
+                    "status" => statusIdToName($report_row['status']),
                     "status_id" => $report_row['status'],
                 );
             }
