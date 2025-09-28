@@ -13,7 +13,7 @@ class ApiModuleReportsGet extends ApiModule
         global $mysql;
 
         $query = "SELECT * FROM `reports`";
-        if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
+        if (!empty($_REQUEST['id'])) {
             $query .= " WHERE `revertid` = '" . mysqli_real_escape_string($mysql, $_REQUEST['id']) . "'";
         } else {
             return json_encode(array(
@@ -35,7 +35,7 @@ class ApiModuleReportsGet extends ApiModule
             "revertid" => (int)$report_row['revertid'],
             "timestamp" => strtotime($report_row['timestamp']),
             "reporter" => $report_row['reporter'],
-            "status" => STATUSES[$report_row['status']] ?? null,
+            "status" => statusIdToName($report_row['status']),
             "status_id" => (int)$report_row['status'],
             "comments" => array(),
         );
@@ -45,11 +45,11 @@ class ApiModuleReportsGet extends ApiModule
         $comment_query = "SELECT * FROM `comments` WHERE `revertid` = '" . $idEscaped . "'";
         $comment_result = mysqli_query($mysql, $comment_query);
         while ($comment_row = mysqli_fetch_assoc($comment_result)) {
-            array_push($data['comments'], array(
+            $data['comments'][] = array(
                 "timestamp" => strtotime($comment_row['timestamp']),
                 "user" => $comment_row['user'],
                 "comment" => $comment_row['comment'],
-            ));
+            );
         }
         mysqli_free_result($comment_result);
 

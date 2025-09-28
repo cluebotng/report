@@ -26,9 +26,9 @@ class OptionsPage extends Page
                 $hide_anon = 0;
             }
 
-            $_SESSION['next_on_review'] = ($next_on_review) ? true : false;
-            $_SESSION['keyboard_shortcuts'] = ($keyboard_shortcuts) ? true : false;
-            $_SESSION['hide_anon'] = ($hide_anon) ? true : false;
+            $_SESSION['next_on_review'] = (bool)$next_on_review;
+            $_SESSION['keyboard_shortcuts'] = (bool)$keyboard_shortcuts;
+            $_SESSION['hide_anon'] = (bool)$hide_anon;
 
             $query = "UPDATE `users` SET";
             $query .= " `next_on_review` = '" . mysqli_real_escape_string($mysql, $next_on_review) . "',";

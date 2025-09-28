@@ -48,7 +48,8 @@ class ListPage extends Page
         echo '<tr><th>ID</th><th>Reporter</th><th>Status</th></tr>';
         foreach ($this->ids as $entry) {
             echo '<tr>'
-                . '<td><a href="?page=View&id=' . urlencode($entry['id']) . '">' . htmlentities($entry['id']) . '</a></td>'
+                . '<td>'
+                . '<a href="?page=View&id=' . urlencode($entry['id']) . '">' . htmlentities($entry['id']) . '</a></td>'
                 . '<td>' . htmlentities($entry['user']) . '</td>'
                 . '<td>' . htmlentities($entry['status']) . '</td>'
                 . '</tr>';

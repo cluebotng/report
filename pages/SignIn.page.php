@@ -12,16 +12,9 @@ class SignInPage extends Page
     private function lookupUser($username)
     {
         global $mysql;
-        $query = "SELECT 
-    `userid`, 
-    `username`, 
-    `admin`, 
-    `superadmin`, 
-    `next_on_review`, 
-    `hide_anon`, 
-    `keyboard_shortcuts`
-              FROM `users`
-              WHERE `username` = ?";
+        $query = "SELECT `userid`, `username`, `admin`, `superadmin`, `next_on_review`, 
+                  `hide_anon`, `keyboard_shortcuts`
+                  FROM `users` WHERE `username` = ?";
         if ($stmt = mysqli_prepare($mysql, $query)) {
             mysqli_stmt_bind_param($stmt, "s", $username);
             mysqli_stmt_execute($stmt);
@@ -101,12 +94,12 @@ class SignInPage extends Page
             // If we managed to do the dance above, then we are logged in
             if ($user) {
                 $_SESSION['userid'] = $user['userid'];
-                $_SESSION['next_on_review'] = $user['next_on_review'] ? true : false;
+                $_SESSION['next_on_review'] = (bool)$user['next_on_review'];
                 $_SESSION['username'] = $user['username'];
-                $_SESSION['admin'] = $user['admin'] ? true : false;
-                $_SESSION['sadmin'] = $user['superadmin'] ? true : false;
-                $_SESSION['hide_anon'] = $user['hide_anon'] ? true : false;
-                $_SESSION['keyboard_shortcuts'] = $user['keyboard_shortcuts'] ? true : false;
+                $_SESSION['admin'] = (bool)$user['admin'];
+                $_SESSION['sadmin'] = (bool)$user['superadmin'];
+                $_SESSION['hide_anon'] = (bool)$user['hide_anon'];
+                $_SESSION['keyboard_shortcuts'] = (bool)$user['keyboard_shortcuts'];
 
                 header('Location: ?page=List');
                 die();
