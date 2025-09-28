@@ -43,7 +43,6 @@ class ApiModuleReportsList extends ApiModule
             $bindParams = array_merge([$stmt, $types], $params);
             call_user_func_array('mysqli_stmt_bind_param', $bindParams);
         }
-        
         mysqli_stmt_execute($stmt);
         $report_results = mysqli_stmt_get_result($stmt);
         while ($report_row = mysqli_fetch_assoc($report_results)) {
