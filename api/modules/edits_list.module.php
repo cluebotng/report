@@ -82,19 +82,24 @@ class ApiModuleEditsList extends ApiModule
                 $data['edit-' . $row['id']]['score'] = (float)$matches[1];
             }
 
-            $escape = mysqli_real_escape_string($mysql, $row['diff']);
-            $beaten_query = "SELECT * FROM `beaten` WHERE `diff` = '" . $escape . "'";
-            $beaten_result = mysqli_query($mysql, $beaten_query);
+            $beaten_query = "SELECT * FROM `beaten` WHERE `diff` = ?";
+            $beaten_stmt = mysqli_prepare($mysql, $beaten_query);
+            mysqli_stmt_bind_param($beaten_stmt, 's', $row['diff']);
+            mysqli_stmt_execute($beaten_stmt);
+            $beaten_result = mysqli_stmt_get_result($beaten_stmt);
             if (mysqli_num_rows($beaten_result) > 0) {
                 $data['edit-' . $row['id']]['beaten'] = true;
 
                 $beaten_row = mysqli_fetch_assoc($beaten_result);
                 $data['edit-' . $row['id']]['beaten_by'] = $beaten_row['user'];
             }
+            mysqli_stmt_close($beaten_stmt);
 
-            $escape = mysqli_real_escape_string($mysql, $row['id']);
-            $report_query = "SELECT * FROM `reports` WHERE `revertid` = '" . $escape . "'";
-            $report_result = mysqli_query($mysql, $report_query);
+            $report_query = "SELECT * FROM `reports` WHERE `revertid` = ?";
+            $report_stmt = mysqli_prepare($mysql, $report_query);
+            mysqli_stmt_bind_param($report_stmt, 's', $row['id']);
+            mysqli_stmt_execute($report_stmt);
+            $report_result = mysqli_stmt_get_result($report_stmt);
             if (mysqli_num_rows($report_result) > 0) {
                 $report_row = mysqli_fetch_assoc($report_result);
                 $data['edit-' . $row['id']]['report'] = array(
@@ -104,6 +109,7 @@ class ApiModuleEditsList extends ApiModule
                     "status_id" => $report_row['status'],
                 );
             }
+            mysqli_stmt_close($report_stmt);
         }
 
         mysqli_free_result($result);

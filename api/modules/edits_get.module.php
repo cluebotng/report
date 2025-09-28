@@ -14,13 +14,13 @@ class ApiModuleEditsGet extends ApiModule
 
         $conditions = array();
         if (!empty($_REQUEST['edit_id'])) {
-            $conditions[] = "`id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['edit_id']) . "'";
+            $conditions[] = "`id` = ?";
         }
         if (!empty($_REQUEST['old_id'])) {
-            $conditions[] = "`old_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['old_id']) . "'";
+            $conditions[] = "`old_id` = ?";
         }
         if (!empty($_REQUEST['new_id'])) {
-            $conditions[] = "`new_id` = '" . mysqli_real_escape_string($mysql, $_REQUEST['new_id']) . "'";
+            $conditions[] = "`new_id` = ?";
         }
 
         if (count($conditions) === 0) {
@@ -31,7 +31,25 @@ class ApiModuleEditsGet extends ApiModule
         }
 
         $query = "SELECT * FROM `vandalism` WHERE " . implode(" AND ", $conditions);
-        $result = mysqli_query($mysql, $query);
+        $stmt = mysqli_prepare($mysql, $query);
+        $params = array();
+        foreach ($conditions as $condition) {
+            if (str_contains($condition, 'old_id')) {
+                $params[] = $_REQUEST['old_id'];
+            } elseif (str_contains($condition, 'new_id')) {
+                $params[] = $_REQUEST['new_id'];
+            } else {
+                $params[] = $_REQUEST['edit_id'];
+            }
+        }
+        $types = str_repeat('s', count($params));
+        $stmt_params = array($stmt, $types);
+        foreach ($params as $param) {
+            $stmt_params[] = $param;
+        }
+        call_user_func_array('mysqli_stmt_bind_param', $stmt_params);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
         if (mysqli_num_rows($result) !== 1) {
             return json_encode(array(
                 "error" => "argument_error",
@@ -62,19 +80,25 @@ class ApiModuleEditsGet extends ApiModule
                 $data['score'] = (float)$matches[1];
             }
 
-            $diffEscaped = mysqli_real_escape_string($mysql, $row['diff']);
-            $beaten_query = "SELECT * FROM `beaten` WHERE `diff` = '" . $diffEscaped . "'";
-            $beaten_result = mysqli_query($mysql, $beaten_query);
+            $beaten_query = "SELECT * FROM `beaten` WHERE `diff` = ?";
+            $beaten_stmt = mysqli_prepare($mysql, $beaten_query);
+            mysqli_stmt_bind_param($beaten_stmt, 's', $row['diff']);
+            mysqli_stmt_execute($beaten_stmt);
+            $beaten_result = mysqli_stmt_get_result($beaten_stmt);
             if (mysqli_num_rows($beaten_result) > 0) {
                 $data['beaten'] = true;
 
                 $beaten_row = mysqli_fetch_assoc($beaten_result);
                 $data['beaten_by'] = $beaten_row['user'];
             }
+            mysqli_stmt_close($beaten_stmt);
 
-            $idEscaped = mysqli_real_escape_string($mysql, $row['id']);
-            $report_query = "SELECT * FROM `reports` WHERE `revertid` = '" . $idEscaped . "'";
-            $report_result = mysqli_query($mysql, $report_query);
+            $idEscaped = $row['id'];
+            $report_query = "SELECT * FROM `reports` WHERE `revertid` = ?";
+            $report_stmt = mysqli_prepare($mysql, $report_query);
+            mysqli_stmt_bind_param($report_stmt, 's', $idEscaped);
+            mysqli_stmt_execute($report_stmt);
+            $report_result = mysqli_stmt_get_result($report_stmt);
             if (mysqli_num_rows($report_result) > 0) {
                 $report_row = mysqli_fetch_assoc($report_result);
                 $data['report'] = array(
@@ -84,9 +108,10 @@ class ApiModuleEditsGet extends ApiModule
                     "status_id" => (int)$report_row['status'],
                 );
             }
+            mysqli_stmt_close($report_stmt);
         }
 
-        mysqli_free_result($result);
+        mysqli_stmt_close($stmt);
         return json_encode($data, JSON_PRETTY_PRINT);
     }
 }
