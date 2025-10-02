@@ -50,7 +50,7 @@ class ApiModuleReportsGet extends ApiModule
 
         $comment_query = "SELECT * FROM `comments` WHERE `revertid` = ?";
         $comment_stmt = mysqli_prepare($mysql, $comment_query);
-        if (!$stmt) {
+        if (!$comment_stmt) {
             return json_encode(array(
                 "error" => "database_error",
                 "error_message" => "Failed to prepare statement",
