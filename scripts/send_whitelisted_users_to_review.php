@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUndefinedVariableInspection */
 
 if (php_sapi_name() !== 'cli') {
     die();

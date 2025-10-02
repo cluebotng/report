@@ -74,5 +74,5 @@ class OptionsPage extends Page
 }
 
 if (isset($_SESSION['username'])) {
-    Page::registerPage('Options', 'OptionsPage', 5, true, false);
+    Page::registerPage('Options', 'OptionsPage', 5);
 }

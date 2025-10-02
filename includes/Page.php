@@ -42,8 +42,7 @@ class Page
             $className = '\\ReportInterface\\Page';
         }
 
-        $page = new $className();
-        return $page;
+        return new $className();
     }
 
     public function writeHeader()
@@ -54,10 +53,12 @@ class Page
     public function writeNavigation()
     {
         echo '<ul>' . "\n";
-        uasort(self::$pages, array('\\ReportInterface\\Page', 'sortPages'));
-        foreach (self::$pages as $name => $data) {
-            if ($data['visible']) {
-                echo "\t" . '<li><a href="?page=' . urlencode($name) . '">' . htmlentities($name) . '</a></li>' . "\n";
+        if (self::$pages !== null) {
+            uasort(self::$pages, array('\\ReportInterface\\Page', 'sortPages'));
+            foreach (self::$pages as $name => $data) {
+                if ($data['visible']) {
+                    echo "\t" . '<li><a href="?page=' . urlencode($name) . '">' . htmlentities($name) . '</a></li>' . "\n";
+                }
             }
         }
         echo '</ul>' . "\n";

@@ -15,9 +15,13 @@
         <th>Diff:</th>
         <td class="diffborder">
             <?PHP
-                $context  = stream_context_create(array('http' => array('user_agent' => 'ClueBot NG Report Interface')));
+                $context  = stream_context_create(
+                    array('http' => array('user_agent' => 'ClueBot NG Report Interface'))
+                );
+                $url = 'https://en.wikipedia.org/w/index.php?diffonly=1&action=render&diff=';
+                $url .= urlencode($this->row['new_id']);
                 echo file_get_contents(
-                    'https://en.wikipedia.org/w/index.php?diffonly=1&action=render&diff=' . urlencode($this->row['new_id']),
+                    $url,
                     false,
                     $context
                 );

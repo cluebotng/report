@@ -39,10 +39,11 @@ class ApiModuleReviewImport extends ApiModule
         }
         $edit_groups = json_decode($raw, true);
         $processed_groups = array();
+        $reviewAPI = 'https://cluebotng-review.toolforge.org/api/v1/edit-groups/';
         foreach ($edit_groups as $edit_group) {
             if ($edit_group["type"] == "Reported False Positives") {
                 $raw = @file_get_contents(
-                    'https://cluebotng-review.toolforge.org/api/v1/edit-groups/' . $edit_group["id"] . '/dump-report-status/',
+                    $reviewAPI . $edit_group["id"] . '/dump-report-status/',
                     false,
                     $context
                 );

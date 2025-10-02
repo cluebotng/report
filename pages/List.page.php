@@ -1,11 +1,12 @@
 <?PHP
+/** @noinspection PhpMissingParentConstructorInspection */
 
 namespace ReportInterface;
 
 class ListPage extends Page
 {
-    private $ids;
-    private $current_page;
+    private array $ids;
+    private int $current_page;
 
     public function __construct()
     {
@@ -22,8 +23,14 @@ class ListPage extends Page
             $where = '';
         }
 
-        $limit = 'LIMIT ' . mysqli_real_escape_string($mysql, $this->current_page * $entries_per_page) . ',' . mysqli_real_escape_string($mysql, $entries_per_page);
-        $result = mysqli_query($mysql, 'SELECT `revertid`, `reporter`, `status` FROM `reports`' . $where . ' ORDER BY `status`, `revertid` ASC ' . $limit);
+        $page = mysqli_real_escape_string($mysql, $this->current_page * $entries_per_page);
+        $pageLimit = mysqli_real_escape_string($mysql, $entries_per_page);
+
+        $limit = 'LIMIT ' . $page . ',' . $pageLimit;
+        $result = mysqli_query(
+            $mysql,
+            'SELECT `revertid`, `reporter`, `status` FROM `reports`'. $where .' ORDER BY `status`, `revertid` '. $limit
+        );
         $this->ids = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $this->ids[] = array(
@@ -34,7 +41,7 @@ class ListPage extends Page
         }
     }
 
-    public function writeHeader()
+    public function writeHeader(): void
     {
         echo 'List';
         if ((isset($_SESSION['hide_anon'])) && ($_SESSION['hide_anon'])) {

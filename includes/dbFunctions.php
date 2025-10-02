@@ -213,9 +213,10 @@ function isSAdmin()
 
 function userHasWikiRights($username)
 {
+    $wikiAPI = 'https://en.wikipedia.org/w/api.php';
     $context  = stream_context_create(array('http' => array('user_agent' => 'ClueBot NG Report Interface')));
     $raw = @file_get_contents(
-        'https://en.wikipedia.org/w/api.php?format=json&action=query&list=users&usprop=centralids|rights&ususers=' . urlencode($username),
+        $wikiAPI.'?format=json&action=query&list=users&usprop=centralids|rights&ususers=' . urlencode($username),
         false,
         $context
     );

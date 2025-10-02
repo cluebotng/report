@@ -49,7 +49,10 @@ class ReportPage extends Page
         echo '<form action="?page=Report" method="post">';
 
         echo '<table class="reporttable">';
-        echo '<tr><th>ID:</th><td><input type="hidden" name="id" value="' . $this->row['id'] . '" />' . $this->row['id'] . '</td></tr>';
+        echo '<tr>';
+        echo '<th>ID:</th>';
+        echo '<td><input type="hidden" name="id" value="' . $this->row['id'] . '" />' . $this->row['id'] . '</td>';
+        echo '</tr>';
         echo '<tr><th>User:</th><td>' . $this->row['user'] . '</td></tr>';
         echo '<tr><th>Article:</th><td>' . $this->row['article'] . '</td></tr>';
         echo '<tr><th>Diff:</th><td style="border: 1px dashed #000000">';
@@ -68,11 +71,17 @@ class ReportPage extends Page
             $user = $_SESSION['username'];
         }
         echo '<tr><th>Your username:</th><td><input type="text" name="user" value="' . $user . '"></td></tr>';
-        echo '<tr><th>Reverted:</th><td>' . (($this->row['reverted'] == 1) ? 'Yes' : '<b><u><span style="color:red">No</span></u></b>') . '</td></tr>';
+        echo '<tr>';
+        echo '<th>Reverted:</th>';
+        echo '<td>';
+        echo (($this->row['reverted'] == 1) ? 'Yes' : '<b><u><span style="color:red">No</span></u></b>');
+        echo '</td>';
+        echo '</tr>';
         if ($this->row['reverted'] == 1) {
             echo '<tr><th>Comment<br />(optional):</th><td><textarea name="comment" cols=80 rows=3></textarea><br />';
             echo '<small><em>Note</em>: Comments are completely optional. You do not have to justify your edit.<br />';
-            echo 'If this is a false positive, then you\'re right, and the bot is wrong - you don\'t need to explain why.';
+            echo 'If this is a false positive, then you\'re right, and the bot is wrong - ';
+            echo 'you don\'t need to explain why.';
             echo '</small></td></tr>';
             echo '<tr><td colspan=2><input type="submit" name="submit" value="Report false positive" /></td></tr>';
         }

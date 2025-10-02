@@ -2,6 +2,7 @@
 
 namespace ReportInterface;
 
+use Exception;
 use MediaWiki\OAuthClient\Client;
 use MediaWiki\OAuthClient\ClientConfig;
 use MediaWiki\OAuthClient\Consumer;
@@ -35,6 +36,7 @@ class SignInPage extends Page
             mysqli_stmt_bind_param($stmt, "s", $username);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_close($stmt);
+            return true;
         } else {
             return false;
         }
@@ -59,14 +61,26 @@ class SignInPage extends Page
         $client = new Client($conf);
 
         if (isset($_GET['oauth_verifier'])) {
-            // Callback URL - verify
-            $requestToken = new Token($_SESSION['request_key'], $_SESSION['request_secret']);
-            $accessToken = $client->complete($requestToken, $_GET['oauth_verifier']);
-            $identity = $client->identify($accessToken);
+            try {
+                // Callback URL - verify
+                if (!isset($_SESSION['request_key']) || !isset($_SESSION['request_secret'])) {
+                    throw new Exception('OAuth request token not found in session. Please try signing in again.');
+                }
+                
+                $requestToken = new Token($_SESSION['request_key'], $_SESSION['request_secret']);
+                $accessToken = $client->complete($requestToken, $_GET['oauth_verifier']);
+                $identity = $client->identify($accessToken);
 
-            // We are done with these
-            unset($_SESSION['request_key']);
-            unset($_SESSION['request_secret']);
+                // We are done with these
+                unset($_SESSION['request_key']);
+                unset($_SESSION['request_secret']);
+            } catch (Exception $e) {
+                error_log('OAuth Error: ' . $e->getMessage());
+                unset($_SESSION['request_key']);
+                unset($_SESSION['request_secret']);
+                echo '<div class="error">Error during sign in: ' . htmlspecialchars($e->getMessage()) . '</div>';
+                return;
+            }
 
             if (!$identity) {
                 header('Location: ?page=Sign+In');
@@ -107,16 +121,18 @@ class SignInPage extends Page
 
             // Else go through the process again
             header('Location: ?page=Sign+In');
-            die();
         } else {
-            // SignIn URl - redirect
-            list($authUrl, $token) = $client->initiate();
-            $_SESSION['request_key'] = $token->key;
-            $_SESSION['request_secret'] = $token->secret;
-
-            header('Location: ' . $authUrl);
-            die();
+            try {
+                list($authUrl, $token) = $client->initiate();
+                $_SESSION['request_key'] = $token->key;
+                $_SESSION['request_secret'] = $token->secret;
+                header('Location: ' . $authUrl);
+            } catch (\MediaWiki\OAuthClient\Exception $e) {
+                error_log('OAuth Initiation Error: ' . $e->getMessage());
+                header('Location: ?page=Sign+In');
+            }
         }
+        die();
     }
 
     public function writeHeader()
