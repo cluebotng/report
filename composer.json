@@ -7,14 +7,10 @@
         "phpmd/phpmd": "@stable"
     },
     "require": {
+	"php": "^8.3",
         "monolog/monolog": "^3.0",
         "mediawiki/oauthclient": "^2.3",
         "ext-redis": "*"
-    },
-    "config": {
-        "platform": {
-            "php": "8.4"
-        }
     },
     "license": "GNU General Public License"
 }
