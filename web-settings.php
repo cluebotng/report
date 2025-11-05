@@ -6,5 +6,5 @@
     $cb_mysql_pass = getenv('TOOL_TOOLSDB_PASSWORD');
     $cb_mysql_schema = getenv('TOOL_TOOLSDB_SCHEMA');
 
-    $oauth_consumer_key = getenv('OAUTH_KEY');
-    $oauth_consumer_secret = getenv('OAUTH_SECRET');
+    $oauth_consumer_key = getenv('CBNG_REPORT_OAUTH_KEY');
+    $oauth_consumer_secret = getenv('CBNG_REPORT_OAUTH_SECRET');
