@@ -12,10 +12,9 @@ class ReportPage extends Page
         $id = $_REQUEST['id'];
 
         if (isset($_POST['submit'])) {
-            $user = $_POST['user'];
-            createReport($id, $user);
+            createReport($id, 'Anonymous');
             if (trim($_POST['comment']) != '') {
-                createComment($id, $user, $_POST['comment']);
+                createComment($id, 'Anonymous', $_POST['comment']);
             }
         }
 
@@ -63,11 +62,11 @@ class ReportPage extends Page
 
         echo '</td></tr>';
         echo '<tr><th>Reason:</th><td>' . $this->row['reason'] . '</td></tr>';
-        $user = 'Anonymous';
         if (isset($_SESSION['username'])) {
-            $user = $_SESSION['username'];
+            echo '<tr><th>Username:</th><td>' . htmlentities($_SESSION['username']) . '</td></tr>';
+        } else {
+            echo '<tr><th>Username:</th><td>Anonymous <i><a href="?page=Sign+In">sign in</a></i></td></tr>';
         }
-        echo '<tr><th>Your username:</th><td><input type="text" name="user" value="' . $user . '"></td></tr>';
         echo '<tr><th>Reverted:</th><td>' . (($this->row['reverted'] == 1) ? 'Yes' : '<b><u><span style="color:red">No</span></u></b>') . '</td></tr>';
         if ($this->row['reverted'] == 1) {
             echo '<tr><th>Comment<br />(optional):</th><td><textarea name="comment" cols=80 rows=3></textarea><br />';
