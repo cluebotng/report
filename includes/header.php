@@ -9,6 +9,12 @@ require_once 'includes/Page.php';
 require_once 'web-settings.php';
 require_once 'includes/dbFunctions.php';
 
+if (in_array($_SERVER['HTTP_USER_AGENT'] ?? '', $blocked_http_user_agents)) {
+    http_response_code(403);
+    header('Content-Type: text/plain');
+    die('Your request has been blocked.');
+}
+
 foreach (glob('pages/*.page.php') as $page) {
     require_once $page;
 }

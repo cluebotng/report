@@ -8,3 +8,8 @@
 
     $oauth_consumer_key = getenv('CBNG_REPORT_OAUTH_KEY');
     $oauth_consumer_secret = getenv('CBNG_REPORT_OAUTH_SECRET');
+
+    static $blocked_http_user_agents = [
+        // Hitting every report page, link returns 404
+        "Mozilla/5.0 (compatible; ResearchBot/1.0; +https://kaust.edu.sa/bot)",
+    ];
