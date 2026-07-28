@@ -9,7 +9,7 @@
     "require": {
 	"php": "^8.3",
         "monolog/monolog": "^3.0",
-        "mediawiki/oauthclient": "^2.3",
+        "mediawiki/oauthclient": "^3.0",
         "ext-redis": "*"
     },
     "license": "GNU General Public License"

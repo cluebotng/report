@@ -4,34 +4,34 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b126099616702326305bc6c27399a1b",
+    "content-hash": "ded177a6d1b2950d85f68cea1f0ba499",
     "packages": [
         {
             "name": "mediawiki/oauthclient",
-            "version": "2.3.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/mediawiki-oauthclient-php.git",
-                "reference": "15e81485ecd3566c5fddee23bcbdd9dd93c7886b"
+                "reference": "5394cdde78a251f14793c4cdf366f13c00441572"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/mediawiki-oauthclient-php/zipball/15e81485ecd3566c5fddee23bcbdd9dd93c7886b",
-                "reference": "15e81485ecd3566c5fddee23bcbdd9dd93c7886b",
+                "url": "https://api.github.com/repos/wikimedia/mediawiki-oauthclient-php/zipball/5394cdde78a251f14793c4cdf366f13c00441572",
+                "reference": "5394cdde78a251f14793c4cdf366f13c00441572",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "ext-json": "*",
-                "php": ">=7.4",
+                "php": ">=8.1",
                 "psr/log": "^1.0||^2.0||^3.0"
             },
             "require-dev": {
-                "mediawiki/mediawiki-codesniffer": "47.0.0",
-                "mediawiki/minus-x": "1.1.3",
+                "mediawiki/mediawiki-codesniffer": "51.0.0",
+                "mediawiki/mediawiki-phan-config": "0.20.0",
+                "mediawiki/minus-x": "2.0.1",
                 "php-parallel-lint/php-console-highlighter": "1.0.0",
                 "php-parallel-lint/php-parallel-lint": "1.4.0",
-                "phpunit/phpunit": "9.6.21"
+                "phpunit/phpunit": "10.5.63"
             },
             "type": "library",
             "autoload": {
@@ -64,7 +64,7 @@
                 "issues": "https://phabricator.wikimedia.org/tag/oauth/",
                 "source": "https://github.com/wikimedia/oauthclient-php/"
             },
-            "time": "2025-07-08T12:43:45+00:00"
+            "time": "2026-07-27T19:36:06+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2436,5 +2436,5 @@
         "ext-redis": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
