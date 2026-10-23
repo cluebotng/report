@@ -7,7 +7,7 @@
         "phpmd/phpmd": "@stable"
     },
     "require": {
-	"php": "^8.3",
+        "php": ">=8.5.12",
         "monolog/monolog": "^3.0",
         "mediawiki/oauthclient": "^3.0",
         "ext-redis": "*"

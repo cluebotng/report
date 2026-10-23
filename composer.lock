@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ded177a6d1b2950d85f68cea1f0ba499",
+    "content-hash": "232c06e8863a984773eb8be67061ced8",
     "packages": [
         {
             "name": "mediawiki/oauthclient",
@@ -2439,7 +2439,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.3",
+        "php": ">=8.5.12",
         "ext-redis": "*"
     },
     "platform-dev": {},
